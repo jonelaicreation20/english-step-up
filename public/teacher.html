@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teacher Dashboard · English Step-Up</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --primary-light: #eef2ff;
+      --primary-border: #c7d2fe;
+      --purple: #7c3aed;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --soft: #f9fafb;
+      --success: #15803d;
+      --success-bg: #ecfdf5;
+      --success-border: #a7f3d0;
+      --danger: #b91c1c;
+      --danger-bg: #fef2f2;
+      --danger-border: #fecaca;
+      --warning: #c2410c;
+      --warning-bg: #fff7ed;
+      --warning-border: #fed7aa;
+      --shadow: 0 10px 30px rgba(17, 24, 39, 0.07);
+      --shadow-sm: 0 2px 8px rgba(17, 24, 39, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Nunito, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 16px;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, select { font-family: inherit; font-size: inherit; color: inherit; }
+
+    :focus-visible { outline: 3px solid #a5b4fc; outline-offset: 2px; }
+
+    .hidden { display: none !important; }
+
+    /* Top bar */
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      font-size: 18px;
+      margin-right: auto;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      width: 36px; height: 36px;
+      display: grid; place-items: center;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      font-size: 18px;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      line-height: 1;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: none;
+      min-height: 42px;
+      padding: 9px 16px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+      transition: transform 0.15s, background 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn:disabled { opacity: 0.6; cursor: wait; transform: none; }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-light { background: white; border: 1px solid var(--border); color: #374151; }
+    .btn-success { background: #16a34a; color: white; }
+    .btn-danger { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+
+    .menu-wrap { position: relative; }
+
+    .dropdown {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 6px);
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 6px;
+      min-width: 270px;
+      z-index: 30;
+    }
+
+    .dropdown button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      border: none;
+      background: none;
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+
+    .dropdown button:hover { background: var(--soft); }
+    .dropdown strong { display: block; }
+    .dropdown span { font-size: 13px; color: var(--muted); }
+
+    .main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 26px 20px 60px;
+    }
+
+    /* Auth */
+
+    .auth-wrap {
+      min-height: calc(100vh - 140px);
+      display: grid;
+      place-items: center;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 30px 26px;
+    }
+
+    .auth-card .emoji { font-size: 40px; text-align: center; }
+    .auth-card h1 { text-align: center; margin: 6px 0 4px; font-size: 25px; font-weight: 900; }
+    .auth-card p.lead { text-align: center; color: var(--muted); margin: 0 0 20px; }
+
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-weight: 800; margin-bottom: 6px; }
+
+    .field input {
+      width: 100%;
+      min-height: 50px;
+      border: 2px solid var(--border);
+      border-radius: 13px;
+      padding: 10px 14px;
+      font-size: 17px;
+      background: white;
+    }
+
+    .field input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-light);
+    }
+
+    .form-error {
+      background: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      color: var(--danger);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      font-weight: 700;
+    }
+
+    .btn-block { width: 100%; min-height: 50px; }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .back-link a { color: var(--primary); font-weight: 800; }
+
+    /* Dashboard */
+
+    .page-title {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .page-title h1 { margin: 0; font-size: 28px; font-weight: 900; }
+    .page-title span { color: var(--muted); font-size: 14px; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat .label { color: var(--muted); font-weight: 700; font-size: 14px; }
+    .stat .value { font-size: 30px; font-weight: 900; line-height: 1.2; margin-top: 4px; }
+    .stat .hint { color: var(--muted); font-size: 13px; }
+
+    .tabs {
+      display: inline-flex;
+      gap: 4px;
+      background: #eceef4;
+      padding: 4px;
+      border-radius: 14px;
+      margin-bottom: 14px;
+    }
+
+    .tabs button {
+      border: none;
+      background: transparent;
+      border-radius: 11px;
+      min-height: 40px;
+      padding: 0 18px;
+      font-weight: 800;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .tabs button.active { background: white; color: var(--primary); box-shadow: var(--shadow-sm); }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .toolbar input, .toolbar select {
+      min-height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 12px;
+      background: white;
+    }
+
+    .toolbar input { flex: 1; min-width: 180px; }
+
+    .legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .legend i {
+      display: inline-block;
+      width: 12px; height: 12px;
+      border-radius: 4px;
+      margin-right: 5px;
+      vertical-align: -1px;
+    }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+
+    th, td {
+      padding: 10px 10px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      background: var(--soft);
+      position: sticky;
+      top: 0;
+    }
+
+    th.lesson-col, td.lesson-col { text-align: center; padding: 8px 4px; }
+
+    tbody tr { cursor: pointer; transition: background 0.1s; }
+    tbody tr:hover { background: #f8f9ff; }
+
+    .sticky-col {
+      position: sticky;
+      left: 0;
+      background: white;
+      z-index: 1;
+    }
+
+    th.sticky-col { background: var(--soft); z-index: 2; }
+    tbody tr:hover .sticky-col { background: #f8f9ff; }
+
+    .student-name { font-weight: 800; }
+
+    .mini-bar {
+      width: 90px;
+      height: 8px;
+      border-radius: 999px;
+      background: #eceef4;
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    .mini-bar span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--purple));
+    }
+
+    .cell {
+      display: inline-grid;
+      place-items: center;
+      min-width: 46px;
+      padding: 0 6px;
+      height: 34px;
+      border-radius: 9px;
+      font-weight: 800;
+      font-size: 13px;
+      background: #f3f4f6;
+      color: #9ca3af;
+    }
+
+    .cell.pass { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+    .cell.done { background: #22c55e; color: white; }
+    .cell.low { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
+
+    .score-pill {
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+    }
+
+    .score-pill.good { background: var(--success-bg); color: var(--success); }
+    .score-pill.low { background: var(--warning-bg); color: var(--warning); }
+    .score-pill.none { background: #f3f4f6; color: var(--muted); }
+
+    .muted { color: var(--muted); }
+
+    .empty {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--muted);
+    }
+
+    .empty .emoji { font-size: 40px; }
+
+    /* Lessons tab */
+
+    .lesson-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 14px;
+      padding: 14px;
+    }
+
+    .lesson-stat {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .lesson-stat h3 { margin: 0 0 2px; font-size: 17px; }
+    .lesson-stat .meta { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+
+    .q-row {
+      display: grid;
+      grid-template-columns: 34px 1fr 44px;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .q-row .bar {
+      height: 10px;
+      border-radius: 999px;
+      background: #eceef4;
+      overflow: hidden;
+    }
+
+    .q-row .bar span { display: block; height: 100%; border-radius: 999px; }
+    .q-row strong { text-align: right; }
+
+    .hardest {
+      margin-top: 10px;
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      color: var(--warning);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+
+    /* Student dialog */
+
+    dialog {
+      width: min(760px, calc(100% - 24px));
+      max-height: calc(100vh - 40px);
+      border: none;
+      border-radius: 22px;
+      padding: 0;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+      color: var(--text);
+    }
+
+    dialog::backdrop { background: rgba(17, 24, 39, 0.55); }
+
+    .dialog-head {
+      position: sticky;
+      top: 0;
+      background: white;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 20px 22px 14px;
+      border-bottom: 1px solid var(--border);
+      z-index: 2;
+    }
+
+    .dialog-head h2 { margin: 0; font-size: 23px; font-weight: 900; }
+    .dialog-head p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
+
+    .close-btn {
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .dialog-body { padding: 18px 22px 24px; }
+
+    .dialog-body h3 { margin: 18px 0 10px; font-size: 17px; }
+
+    .lesson-summary {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .lesson-box {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .lesson-box strong { display: block; font-size: 18px; }
+    .lesson-box.done { background: var(--success-bg); border-color: var(--success-border); }
+    .lesson-box.low { background: var(--warning-bg); border-color: var(--warning-border); }
+
+    .attempt {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .attempt .when { color: var(--muted); min-width: 130px; }
+    .attempt .what { flex: 1; min-width: 160px; font-weight: 700; }
+
+    .dots { display: flex; gap: 4px; }
+    .dots i { width: 12px; height: 12px; border-radius: 50%; background: #ef4444; }
+    .dots i.right { background: #22c55e; }
+
+    .danger-zone {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(20px);
+      background: #111827;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 14px;
+      font-weight: 700;
+      opacity: 0;
+      transition: opacity 0.25s, transform 0.25s;
+      z-index: 100;
+      pointer-events: none;
+      max-width: calc(100% - 32px);
+      text-align: center;
+    }
+
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 900px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      .topbar { padding: 10px 12px; }
+      .topbar .label { display: none; }
+      .main { padding: 18px 12px 50px; }
+      .page-title h1 { font-size: 23px; }
+      .stat { padding: 14px; }
+      .stat .value { font-size: 24px; }
+      .lesson-stats { grid-template-columns: 1fr; padding: 10px; }
+      .lesson-summary { grid-template-columns: repeat(3, 1fr); }
+      .dialog-body, .dialog-head { padding-left: 16px; padding-right: 16px; }
+      .dropdown { position: fixed; left: 12px; right: 12px; top: 64px; min-width: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topbar">
+    <a class="brand" href="/teacher">
+      <span class="brand-icon" aria-hidden="true">🪜</span>
+      <span>English Step-Up <small>Teacher Dashboard</small></span>
+    </a>
+
+    <div id="topActions" class="hidden" style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="btn btn-light" data-action="refresh" title="Refresh">🔄<span class="label">Refresh</span></button>
+
+      <div class="menu-wrap">
+        <button class="btn btn-success" data-action="toggle-export" aria-haspopup="true" aria-expanded="false">
+          📊<span class="label">Download for Excel</span> ▾
+        </button>
+        <div class="dropdown hidden" id="exportMenu">
+          <button data-action="export" data-type="summary">
+            <strong>📋 Class summary</strong>
+            <span>One row per student: lessons done and best score per lesson</span>
+          </button>
+          <button data-action="export" data-type="attempts">
+            <strong>📝 Every practice attempt</strong>
+            <span>Date, lesson, score and each question right or wrong</span>
+          </button>
+        </div>
+      </div>
+
+      <button class="btn btn-light" data-action="change-password" title="Change password">🔑<span class="label">Password</span></button>
+      <button class="btn btn-light" data-action="logout">Log out</button>
+    </div>
+  </header>
+
+  <main class="main" id="app"></main>
+
+  <dialog id="studentDialog" aria-labelledby="dialogTitle"></dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="lessons.js"></script>
+<script>
+
+const lessons = window.LESSONS;
+const TOKEN_KEY = "englishStepUpTeacherToken";
+
+let token = readStored(TOKEN_KEY);
+let overview = null;
+let tab = "students";
+let search = "";
+let sortBy = "name";
+let refreshTimer = null;
+
+const app = document.getElementById("app");
+const dialog = document.getElementById("studentDialog");
+
+
+/* ===========================
+   HELPERS
+=========================== */
+
+function readStored(key) {
+  try { return localStorage.getItem(key); } catch (e) { return null; }
+}
+
+function writeStored(key, value) {
+  try {
+    if (value == null) localStorage.removeItem(key);
+    else localStorage.setItem(key, value);
+  } catch (e) { /* storage blocked */ }
+}
+
+function escapeHTML(text) {
+  return String(text).replace(/[&<>"']/g, c => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+  ));
+}
+
+async function request(path, { method = "GET", body } = {}) {
+  let response;
+  try {
+    response = await fetch(path, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: body ? JSON.stringify(body) : undefined
+    });
+  } catch (e) {
+    throw new Error("Can't reach the server. Is server.py still running?");
+  }
+
+  if (response.status === 401 && token) {
+    signOut();
+    throw new Error("Please log in again.");
+  }
+
+  return response;
+}
+
+async function api(path, options) {
+  const response = await request(path, options);
+  let data = {};
+  try { data = await response.json(); } catch (e) { /* empty body */ }
+  if (!response.ok) throw new Error(data.error || "Something went wrong.");
+  return data;
+}
+
+let toastTimer;
+
+function showToast(text) {
+  const toast = document.getElementById("toast");
+  toast.textContent = text;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2800);
+}
+
+function timeAgo(iso) {
+  if (!iso) return "Never";
+  const seconds = (Date.now() - new Date(iso).getTime()) / 1000;
+  if (seconds < 60) return "Just now";
+  if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)} h ago`;
+  if (seconds < 172800) return "Yesterday";
+  if (seconds < 604800) return `${Math.floor(seconds / 86400)} days ago`;
+  return new Date(iso).toLocaleDateString();
+}
+
+function fullDate(iso) {
+  return iso ? new Date(iso).toLocaleString([], { dateStyle: "medium", timeStyle: "short" }) : "—";
+}
+
+function averageScore(student) {
+  const scores = Object.values(student.lessons).map(l => l.percent);
+  return scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
+}
+
+function scorePill(score) {
+  if (score == null) return `<span class="score-pill none">No scores</span>`;
+  const pass = overview.passPercent;
+  return `<span class="score-pill ${score >= pass ? "good" : "low"}">${score}%</span>`;
+}
+
+function barColor(percent) {
+  if (percent >= 80) return "#22c55e";
+  if (percent >= 60) return "#f59e0b";
+  return "#ef4444";
+}
+
+
+/* ===========================
+   LOG IN
+=========================== */
+
+async function showAuth(message) {
+  document.getElementById("topActions").classList.add("hidden");
+  stopAutoRefresh();
+
+  let hasPassword = true;
+  try {
+    hasPassword = (await api("/api/teacher/status")).hasPassword;
+  } catch (e) {
+    message = e.message;
+  }
+
+  const setup = !hasPassword;
+
+  app.innerHTML = `
+    <div class="auth-wrap">
+      <form class="auth-card" id="authForm" novalidate>
+        <div class="emoji" aria-hidden="true">${setup ? "🧑‍🏫" : "🔐"}</div>
+        <h1>${setup ? "Create your teacher password" : "Teacher log in"}</h1>
+        <p class="lead">${setup
+          ? "This is the first time. Choose a password only you know."
+          : "See your students' progress and scores."}</p>
+
+        <div class="form-error ${message ? "" : "hidden"}" id="authError" role="alert">${message ? escapeHTML(message) : ""}</div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" type="password" autocomplete="${setup ? "new-password" : "current-password"}" required />
+        </div>
+
+        ${setup ? `
+          <div class="field">
+            <label for="password2">Type it again</label>
+            <input id="password2" type="password" autocomplete="new-password" required />
+          </div>` : ""}
+
+        <button class="btn btn-primary btn-block" type="submit" id="authSubmit">
+          ${setup ? "Create password & open dashboard" : "Log in"}
+        </button>
+
+        <span class="back-link"><a href="/">← Back to the student site</a></span>
+      </form>
+    </div>
+  `;
+
+  document.getElementById("password").focus();
+
+  document.getElementById("authForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    const errorBox = document.getElementById("authError");
+    const submit = document.getElementById("authSubmit");
+    const password = document.getElementById("password").value;
+
+    const fail = text => {
+      errorBox.textContent = text;
+      errorBox.classList.remove("hidden");
+      submit.disabled = false;
+    };
+
+    if (setup) {
+      if (password.length < 6) return fail("Use at least 6 characters.");
+      if (password !== document.getElementById("password2").value) return fail("The two passwords are not the same.");
+    }
+
+    submit.disabled = true;
+
+    try {
+      const data = await api(setup ? "/api/teacher/setup" : "/api/teacher/login", {
+        method: "POST",
+        body: { password }
+      });
+      token = data.token;
+      writeStored(TOKEN_KEY, token);
+      if (setup) showToast("Password created. Welcome! 🎉");
+      loadDashboard();
+    } catch (e) {
+      fail(e.message);
+    }
+  });
+}
+
+function signOut() {
+  token = null;
+  writeStored(TOKEN_KEY, null);
+  if (dialog.open) dialog.close();
+  showAuth();
+}
+
+async function logout() {
+  try { await api("/api/logout", { method: "POST", body: {} }); } catch (e) { /* leaving anyway */ }
+  signOut();
+}
+
+
+/* ===========================
+   DASHBOARD
+=========================== */
+
+async function loadDashboard(quiet) {
+  if (!quiet) app.innerHTML = `<div class="empty"><div class="emoji">⏳</div>Loading…</div>`;
+
+  try {
+    overview = await api("/api/teacher/overview");
+  } catch (e) {
+    if (!token) return;
+    if (quiet) return showToast(e.message);
+    app.innerHTML = `
+      <div class="empty">
+        <div class="emoji">😕</div>
+        <p>${escapeHTML(e.message)}</p>
+        <button class="btn btn-primary" data-action="refresh">Try again</button>
+      </div>`;
+    return;
+  }
+
+  document.getElementById("topActions").classList.remove("hidden");
+  renderDashboard();
+  startAutoRefresh();
+}
+
+function renderDashboard() {
+  const students = overview.students;
+  const total = students.length;
+  const weekAgo = Date.now() - 7 * 86400000;
+
+  const lessonsDone = students.reduce((sum, s) => sum + s.completed.length, 0);
+  const averages = students.map(averageScore).filter(score => score != null);
+  const classAverage = averages.length ? Math.round(averages.reduce((a, b) => a + b, 0) / averages.length) : null;
+  const activeThisWeek = students.filter(s => s.lastActive && new Date(s.lastActive).getTime() > weekAgo).length;
+
+  const keepFocus = document.activeElement && document.activeElement.id === "search";
+
+  app.innerHTML = `
+    <div class="page-title">
+      <h1>👋 Your class</h1>
+      <span>Updated ${new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })} · refreshes every 30 seconds</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="label">👩‍🎓 Students</div>
+        <div class="value">${total}</div>
+        <div class="hint">with an account</div>
+      </div>
+      <div class="stat">
+        <div class="label">✅ Lessons completed</div>
+        <div class="value">${total ? (lessonsDone / total).toFixed(1) : 0}</div>
+        <div class="hint">average per student (of ${lessons.length})</div>
+      </div>
+      <div class="stat">
+        <div class="label">⭐ Average score</div>
+        <div class="value">${classAverage == null ? "—" : classAverage + "%"}</div>
+        <div class="hint">best practice score, all lessons</div>
+      </div>
+      <div class="stat">
+        <div class="label">🔥 Active this week</div>
+        <div class="value">${activeThisWeek}</div>
+        <div class="hint">students in the last 7 days</div>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="${tab === "students" ? "active" : ""}" data-action="tab" data-tab="students" role="tab" aria-selected="${tab === "students"}">👩‍🎓 Students</button>
+      <button class="${tab === "lessons" ? "active" : ""}" data-action="tab" data-tab="lessons" role="tab" aria-selected="${tab === "lessons"}">📚 Lessons</button>
+    </div>
+
+    <div class="panel">
+      ${tab === "students" ? studentsHTML() : lessonsHTML()}
+    </div>
+  `;
+
+  const searchBox = document.getElementById("search");
+  if (searchBox) {
+    searchBox.addEventListener("input", event => {
+      search = event.target.value;
+      renderStudentRows();
+    });
+    document.getElementById("sort").addEventListener("change", event => {
+      sortBy = event.target.value;
+      renderStudentRows();
+    });
+    if (keepFocus) {
+      searchBox.focus();
+      searchBox.setSelectionRange(search.length, search.length);
+    }
+  }
+}
+
+
+/* ---------- Students tab ---------- */
+
+function studentsHTML() {
+  if (!overview.students.length) {
+    return `
+      <div class="empty">
+        <div class="emoji">🌱</div>
+        <p><strong>No students yet.</strong></p>
+        <p>Ask your students to open the student site and choose <strong>"I'm new here"</strong>.<br>
+        They will appear here as soon as they make an account.</p>
+      </div>`;
+  }
+
+  return `
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="🔍 Search a student…" value="${escapeHTML(search)}" aria-label="Search students" />
+      <select id="sort" aria-label="Sort students">
+        <option value="name" ${sortBy === "name" ? "selected" : ""}>Sort: Name (A–Z)</option>
+        <option value="progress" ${sortBy === "progress" ? "selected" : ""}>Sort: Most lessons done</option>
+        <option value="needs-help" ${sortBy === "needs-help" ? "selected" : ""}>Sort: Needs help first</option>
+        <option value="recent" ${sortBy === "recent" ? "selected" : ""}>Sort: Recently active</option>
+      </select>
+      <div class="legend">
+        <span><i style="background:#22c55e"></i>Completed</span>
+        <span><i style="background:var(--success-bg);border:1px solid var(--success-border)"></i>Passed, not finished</span>
+        <span><i style="background:var(--warning-bg);border:1px solid var(--warning-border)"></i>Below ${overview.passPercent}%</span>
+        <span><i style="background:#f3f4f6"></i>Not tried</span>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="sticky-col">Student</th>
+            <th>Progress</th>
+            <th>Avg score</th>
+            <th>Last active</th>
+            ${lessons.map(l => `<th class="lesson-col" title="${escapeHTML(l.title)}">L${l.id}</th>`).join("")}
+          </tr>
+        </thead>
+        <tbody id="studentRows">${studentRowsHTML()}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function sortedStudents() {
+  const term = search.trim().toLowerCase();
+  const list = overview.students.filter(s => s.name.toLowerCase().includes(term));
+
+  const byName = (a, b) => a.name.localeCompare(b.name);
+
+  if (sortBy === "progress") {
+    list.sort((a, b) => b.completed.length - a.completed.length || byName(a, b));
+  } else if (sortBy === "needs-help") {
+    list.sort((a, b) => (averageScore(a) ?? 101) - (averageScore(b) ?? 101) || byName(a, b));
+  } else if (sortBy === "recent") {
+    list.sort((a, b) => (b.lastActive || "").localeCompare(a.lastActive || ""));
+  } else {
+    list.sort(byName);
+  }
+  return list;
+}
+
+function studentRowsHTML() {
+  const list = sortedStudents();
+
+  if (!list.length) {
+    return `<tr><td colspan="${4 + lessons.length}" class="muted" style="text-align:center;padding:30px">No student matches "${escapeHTML(search)}".</td></tr>`;
+  }
+
+  return list.map(student => {
+    const done = student.completed.length;
+
+    const cells = lessons.map(lesson => {
+      const info = student.lessons[lesson.id];
+      const completed = student.completed.includes(lesson.id);
+      if (!info) return `<td class="lesson-col"><span class="cell" title="Lesson ${lesson.id}: not tried">—</span></td>`;
+
+      const cls = completed ? "done" : info.percent >= overview.passPercent ? "pass" : "low";
+      const tip = `Lesson ${lesson.id}: best ${info.correct}/${info.total} · ${info.attempts} ${info.attempts === 1 ? "try" : "tries"}${completed ? " · completed" : ""}`;
+      return `<td class="lesson-col"><span class="cell ${cls}" title="${escapeHTML(tip)}">${completed ? "✓ " : ""}${info.percent}%</span></td>`;
+    }).join("");
+
+    return `
+      <tr data-action="student" data-id="${student.id}" tabindex="0">
+        <td class="sticky-col"><span class="student-name">${escapeHTML(student.name)}</span></td>
+        <td><span class="mini-bar"><span style="width:${(done / lessons.length) * 100}%"></span></span>${done}/${lessons.length}</td>
+        <td>${scorePill(averageScore(student))}</td>
+        <td class="muted" title="${escapeHTML(fullDate(student.lastActive))}">${timeAgo(student.lastActive)}</td>
+        ${cells}
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderStudentRows() {
+  const body = document.getElementById("studentRows");
+  if (body) body.innerHTML = studentRowsHTML();
+}
+
+
+/* ---------- Lessons tab ---------- */
+
+function lessonsHTML() {
+  const students = overview.students;
+
+  return `
+    <div class="lesson-stats">
+      ${lessons.map(lesson => {
+        const stats = overview.lessonStats[lesson.id];
+        const tried = students.filter(s => s.lessons[lesson.id]).length;
+        const completed = students.filter(s => s.completed.includes(lesson.id)).length;
+        const bests = students.filter(s => s.lessons[lesson.id]).map(s => s.lessons[lesson.id].percent);
+        const avg = bests.length ? Math.round(bests.reduce((a, b) => a + b, 0) / bests.length) : null;
+
+        if (!stats) {
+          return `
+            <div class="lesson-stat">
+              <h3>${lesson.icon} Lesson ${lesson.id}: ${escapeHTML(lesson.title)}</h3>
+              <div class="meta">No practice attempts yet.</div>
+            </div>`;
+        }
+
+        const rates = lesson.questions.map((_, i) =>
+          stats.seen[i] ? Math.round((stats.right[i] / stats.seen[i]) * 100) : null
+        );
+
+        let hardest = -1;
+        rates.forEach((rate, i) => {
+          if (rate != null && (hardest === -1 || rate < rates[hardest])) hardest = i;
+        });
+
+        return `
+          <div class="lesson-stat">
+            <h3>${lesson.icon} Lesson ${lesson.id}: ${escapeHTML(lesson.title)}</h3>
+            <div class="meta">
+              ${tried} tried · ${completed} completed · average best ${avg == null ? "—" : avg + "%"} · ${stats.attempts} attempts
+            </div>
+
+            ${rates.map((rate, i) => `
+              <div class="q-row" title="${escapeHTML(lesson.questions[i].question)}">
+                <span class="muted">Q${i + 1}</span>
+                <span class="bar"><span style="width:${rate || 0}%;background:${barColor(rate || 0)}"></span></span>
+                <strong>${rate == null ? "—" : rate + "%"}</strong>
+              </div>
+            `).join("")}
+
+            ${hardest !== -1 && rates[hardest] < 80 ? `
+              <div class="hardest">
+                ⚠ <strong>Hardest: Q${hardest + 1}</strong> — only ${rates[hardest]}% right on the first try<br>
+                “${escapeHTML(lesson.questions[hardest].question)}”
+              </div>` : ""}
+          </div>
+        `;
+      }).join("")}
+    </div>
+    <p class="muted" style="padding:0 16px 16px;margin:0;font-size:13px">
+      Bars show the % of attempts where students answered that question correctly on the first try.
+    </p>
+  `;
+}
+
+
+/* ---------- Student detail ---------- */
+
+async function openStudent(id) {
+  stopAutoRefresh();
+  dialog.innerHTML = `<div class="dialog-body"><div class="empty">⏳ Loading…</div></div>`;
+  if (!dialog.open) dialog.showModal();
+
+  let data;
+  try {
+    data = await api(`/api/teacher/students/${id}`);
+  } catch (e) {
+    dialog.innerHTML = `<div class="dialog-body"><div class="empty">😕 ${escapeHTML(e.message)}<br><br>
+      <button class="btn btn-light" data-action="close-dialog">Close</button></div></div>`;
+    return;
+  }
+
+  const summary = overview.students.find(s => s.id === id);
+  const { student, attempts } = data;
+
+  dialog.innerHTML = `
+    <div class="dialog-head">
+      <div>
+        <h2 id="dialogTitle">${escapeHTML(student.name)}</h2>
+        <p>Joined ${fullDate(student.createdAt)} · Last active ${timeAgo(student.lastActive)}</p>
+      </div>
+      <button class="close-btn" data-action="close-dialog" aria-label="Close">✕</button>
+    </div>
+
+    <div class="dialog-body">
+      <h3>📚 Lessons (${summary ? summary.completed.length : 0} of ${lessons.length} completed)</h3>
+      <div class="lesson-summary">
+        ${lessons.map(lesson => {
+          const info = summary && summary.lessons[lesson.id];
+          const completed = summary && summary.completed.includes(lesson.id);
+          const cls = completed ? "done" : info && info.percent < overview.passPercent ? "low" : "";
+          return `
+            <div class="lesson-box ${cls}" title="${escapeHTML(lesson.title)}">
+              <span class="muted">L${lesson.id} ${lesson.icon}</span>
+              <strong>${info ? info.percent + "%" : "—"}</strong>
+              <span class="muted">${completed ? "✓ Done" : info ? `${info.attempts} ${info.attempts === 1 ? "try" : "tries"}` : "Not tried"}</span>
+            </div>`;
+        }).join("")}
+      </div>
+
+      <h3>📝 Practice history</h3>
+      ${attempts.length ? attempts.map(a => {
+        const lesson = lessons.find(l => l.id === a.lessonId);
+        const pct = Math.round((a.correct / a.total) * 100);
+        return `
+          <div class="attempt">
+            <span class="when">${fullDate(a.createdAt)}</span>
+            <span class="what">L${a.lessonId}: ${escapeHTML(lesson ? lesson.title : "")}</span>
+            <span class="dots" aria-label="${a.correct} of ${a.total} right on first try">
+              ${a.answers.map((right, i) => `<i class="${right ? "right" : ""}" title="Q${i + 1}: ${right ? "right" : "wrong"}"></i>`).join("")}
+            </span>
+            <span class="score-pill ${pct >= overview.passPercent ? "good" : "low"}">${a.correct}/${a.total} · ${pct}%</span>
+          </div>`;
+      }).join("") : `<p class="muted">No practice attempts yet.</p>`}
+
+      <div class="danger-zone">
+        <button class="btn btn-light" data-action="reset-pin" data-id="${student.id}" data-name="${escapeHTML(student.name)}">🔑 Reset PIN</button>
+        <button class="btn btn-danger" data-action="delete-student" data-id="${student.id}" data-name="${escapeHTML(student.name)}">🗑 Delete student</button>
+      </div>
+    </div>
+  `;
+}
+
+async function resetPin(id, name) {
+  const pin = prompt(`New 4-number PIN for ${name}:`);
+  if (pin == null) return;
+  if (!/^\d{4}$/.test(pin.trim())) return alert("The PIN must be exactly 4 numbers.");
+
+  try {
+    await api(`/api/teacher/students/${id}/pin`, { method: "POST", body: { pin: pin.trim() } });
+    showToast(`PIN changed. Tell ${name} the new PIN: ${pin.trim()}`);
+  } catch (e) {
+    alert(e.message);
+  }
+}
+
+async function deleteStudent(id, name) {
+  if (!confirm(`Delete ${name} and ALL of their scores?\n\nThis cannot be undone.`)) return;
+
+  try {
+    await request(`/api/teacher/students/${id}`, { method: "DELETE" }).then(async r => {
+      if (!r.ok) throw new Error((await r.json()).error || "Could not delete.");
+    });
+    dialog.close();
+    showToast(`${name} was deleted.`);
+    loadDashboard(true);
+  } catch (e) {
+    alert(e.message);
+  }
+}
+
+async function changePassword() {
+  const current = prompt("Your current password:");
+  if (current == null) return;
+  const next = prompt("New password (at least 6 characters):");
+  if (next == null) return;
+  if (next.length < 6) return alert("Use at least 6 characters.");
+  if (next !== prompt("Type the new password again:")) return alert("The two passwords are not the same.");
+
+  try {
+    await api("/api/teacher/password", { method: "POST", body: { current, new: next } });
+    showToast("Password changed ✓");
+  } catch (e) {
+    alert(e.message);
+  }
+}
+
+
+/* ---------- Excel download ---------- */
+
+async function download(type) {
+  document.getElementById("exportMenu").classList.add("hidden");
+  showToast("Preparing your file…");
+
+  try {
+    const response = await request(`/api/teacher/export?type=${type}`);
+    if (!response.ok) throw new Error((await response.json()).error || "Download failed.");
+
+    const blob = await response.blob();
+    const match = /filename="([^"]+)"/.exec(response.headers.get("Content-Disposition") || "");
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = match ? match[1] : "english-step-up.csv";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 5000);
+    showToast("Downloaded ✓ — open the file with Excel.");
+  } catch (e) {
+    showToast(e.message);
+  }
+}
+
+
+/* ---------- Auto refresh ---------- */
+
+function startAutoRefresh() {
+  stopAutoRefresh();
+  refreshTimer = setInterval(() => {
+    if (document.visibilityState === "visible" && !dialog.open) loadDashboard(true);
+  }, 30000);
+}
+
+function stopAutoRefresh() {
+  clearInterval(refreshTimer);
+  refreshTimer = null;
+}
+
+dialog.addEventListener("close", () => {
+  if (token) startAutoRefresh();
+});
+
+
+/* ===========================
+   EVENTS
+=========================== */
+
+document.addEventListener("click", event => {
+  const exportMenu = document.getElementById("exportMenu");
+  if (!event.target.closest(".menu-wrap")) exportMenu.classList.add("hidden");
+
+  // Click on the dark area around the dialog closes it
+  if (event.target === dialog) return dialog.close();
+
+  const el = event.target.closest("[data-action]");
+  if (!el) return;
+
+  switch (el.dataset.action) {
+    case "refresh":         loadDashboard(); break;
+    case "logout":          logout(); break;
+    case "tab":             tab = el.dataset.tab; renderDashboard(); break;
+    case "student":         openStudent(Number(el.dataset.id)); break;
+    case "close-dialog":    dialog.close(); break;
+    case "reset-pin":       resetPin(Number(el.dataset.id), el.dataset.name); break;
+    case "delete-student":  deleteStudent(Number(el.dataset.id), el.dataset.name); break;
+    case "change-password": changePassword(); break;
+    case "export":          download(el.dataset.type); break;
+    case "toggle-export": {
+      const hidden = exportMenu.classList.toggle("hidden");
+      el.setAttribute("aria-expanded", String(!hidden));
+      break;
+    }
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") document.getElementById("exportMenu").classList.add("hidden");
+
+  const row = event.target.closest && event.target.closest("tr[data-action='student']");
+  if (row && (event.key === "Enter" || event.key === " ")) {
+    event.preventDefault();
+    openStudent(Number(row.dataset.id));
+  }
+});
+
+
+/* ===========================
+   START
+=========================== */
+
+if (token) loadDashboard();
+else showAuth();
+
+</script>
+
+</body>
+</html>

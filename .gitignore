@@ -1,0 +1,6 @@
+# Student accounts, PINs and scores — never upload these
+data/
+
+# Python cache
+__pycache__/
+*.pyc

@@ -1,0 +1,2901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>English Step-Up</title>
+  <meta name="description" content="Build your English one step at a time — friendly lessons with examples, practice and listening." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --primary-light: #eef2ff;
+      --primary-border: #c7d2fe;
+      --purple: #7c3aed;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --soft: #f9fafb;
+      --success: #15803d;
+      --success-bg: #ecfdf5;
+      --success-border: #a7f3d0;
+      --danger: #b91c1c;
+      --danger-bg: #fef2f2;
+      --danger-border: #fecaca;
+      --warning: #c2410c;
+      --warning-bg: #fff7ed;
+      --warning-border: #fed7aa;
+      --star: #f59e0b;
+      --shadow: 0 10px 30px rgba(17, 24, 39, 0.07);
+      --shadow-sm: 0 2px 8px rgba(17, 24, 39, 0.06);
+      --radius: 18px;
+      --topbar-h: 64px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Nunito, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 17px;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button { font-family: inherit; font-size: inherit; color: inherit; }
+
+    :focus-visible {
+      outline: 3px solid #a5b4fc;
+      outline-offset: 2px;
+    }
+
+    .hidden { display: none !important; }
+
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;
+    }
+
+    /* ---------- Top bar ---------- */
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      height: var(--topbar-h);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 6px 4px;
+      font-weight: 900;
+      font-size: 19px;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .brand-icon {
+      width: 36px; height: 36px;
+      display: grid; place-items: center;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      color: white;
+      font-size: 18px;
+    }
+
+    .top-progress {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .top-progress .bar {
+      width: 120px;
+      height: 10px;
+      background: var(--primary-light);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .top-progress .fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--purple));
+      border-radius: 999px;
+      transition: width 0.5s ease;
+    }
+
+    .icon-btn {
+      width: 44px; height: 44px;
+      display: grid; place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .menu-btn { display: none; }
+
+    /* ---------- Layout ---------- */
+
+    .layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      min-height: calc(100vh - var(--topbar-h));
+    }
+
+    .sidebar {
+      position: sticky;
+      top: var(--topbar-h);
+      height: calc(100vh - var(--topbar-h));
+      overflow-y: auto;
+      background: #111827;
+      color: white;
+      padding: 22px 16px;
+    }
+
+    .sidebar-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .sidebar-head h2 {
+      margin: 0;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9ca3af;
+    }
+
+    .close-menu {
+      display: none;
+      background: rgba(255,255,255,0.08);
+      border-color: transparent;
+      color: white;
+    }
+
+    .progress-summary {
+      background: rgba(255, 255, 255, 0.07);
+      padding: 16px;
+      border-radius: 16px;
+      margin-bottom: 18px;
+    }
+
+    .progress-summary strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #818cf8, #c084fc);
+      transition: width 0.5s ease;
+      border-radius: 999px;
+    }
+
+    .progress-text {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #d1d5db;
+    }
+
+    .lesson-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      padding: 10px 12px;
+      min-height: 52px;
+      border-radius: 12px;
+      background: transparent;
+      color: #e5e7eb;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .menu-item:hover { background: rgba(255, 255, 255, 0.08); }
+
+    .menu-item.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .menu-num {
+      width: 32px; height: 32px;
+      flex-shrink: 0;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .menu-item.completed .menu-num {
+      background: #22c55e;
+      color: white;
+    }
+
+    .menu-item.active .menu-num { background: rgba(255,255,255,0.25); }
+    .menu-item.active.completed .menu-num { background: #22c55e; }
+
+    .menu-label {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+      min-width: 0;
+    }
+
+    .menu-label span {
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .menu-label small {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .menu-item.active .menu-label small { color: #e0e7ff; }
+
+    /* Voice settings & account (sidebar) */
+
+    .voice-settings {
+      margin-top: 20px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      padding: 4px 14px;
+    }
+
+    .voice-settings[open] { padding-bottom: 14px; }
+
+    .voice-settings summary {
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 10px 0;
+    }
+
+    .voice-settings label {
+      display: block;
+      font-size: 12px;
+      color: #9ca3af;
+      margin: 10px 0 4px;
+      font-weight: 700;
+    }
+
+    .voice-settings select {
+      width: 100%;
+      min-height: 40px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: #1f2937;
+      color: white;
+      font-family: inherit;
+      font-size: 14px;
+      padding: 6px 8px;
+    }
+
+    .test-voice {
+      margin-top: 12px;
+      width: 100%;
+      min-height: 40px;
+      border: none;
+      border-radius: 10px;
+      background: #818cf8;
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .voice-note {
+      font-size: 12px;
+      color: #9ca3af;
+      margin: 10px 0 0;
+      line-height: 1.45;
+    }
+
+    .sidebar-user {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px dashed rgba(255,255,255,0.2);
+      font-size: 14px;
+      color: #d1d5db;
+      word-break: break-word;
+    }
+
+    .logout-btn {
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: white;
+      border-radius: 10px;
+      padding: 8px 12px;
+      min-height: 38px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .logout-btn:hover { background: rgba(255,255,255,0.18); }
+
+    .user-chip {
+      font-weight: 800;
+      font-size: 14px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border-radius: 999px;
+      padding: 7px 12px;
+      max-width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Logged out: only the login card is shown */
+
+    .logged-out .sidebar,
+    .logged-out .overlay,
+    .logged-out .menu-btn,
+    .logged-out .top-progress,
+    .logged-out .user-chip,
+    .logged-out .home-btn { display: none !important; }
+
+    .logged-out .layout { display: block; }
+
+    .login-wrap {
+      min-height: calc(100vh - var(--topbar-h) - 64px);
+      display: grid;
+      place-items: center;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      padding: 32px 28px;
+      animation: fadeUp 0.3s ease;
+    }
+
+    .login-card .big-emoji {
+      width: 72px; height: 72px;
+      display: grid; place-items: center;
+      border-radius: 22px;
+      margin: 0 auto 14px;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      font-size: 36px;
+    }
+
+    .login-card h1 {
+      text-align: center;
+      margin: 0 0 4px;
+      font-size: 27px;
+      font-weight: 900;
+    }
+
+    .login-card .lead {
+      text-align: center;
+      color: var(--muted);
+      margin: 0 0 20px;
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      background: #f3f4f6;
+      padding: 4px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+
+    .segmented button {
+      border: none;
+      background: transparent;
+      border-radius: 11px;
+      min-height: 44px;
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .segmented button.active {
+      background: white;
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .field { margin-bottom: 14px; }
+
+    .field label {
+      display: block;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .field input {
+      width: 100%;
+      min-height: 52px;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-family: inherit;
+      font-size: 18px;
+      color: var(--text);
+      background: white;
+    }
+
+    .field input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-light);
+    }
+
+    .field input.pin-input {
+      letter-spacing: 0.5em;
+      font-weight: 800;
+    }
+
+    .field small {
+      display: block;
+      color: var(--muted);
+      margin-top: 5px;
+      font-size: 13px;
+    }
+
+    .form-error {
+      background: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      color: var(--danger);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .btn-block { width: 100%; }
+
+    .btn:disabled { opacity: 0.6; cursor: wait; transform: none; }
+
+    .teacher-link {
+      display: block;
+      text-align: center;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .teacher-link a { color: var(--primary); font-weight: 800; }
+
+    .save-status {
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .save-status.ok { color: var(--success); }
+    .save-status.error { color: var(--danger); }
+
+    .link-btn {
+      border: none;
+      background: none;
+      color: var(--primary);
+      font-weight: 800;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+
+    .loading {
+      text-align: center;
+      color: var(--muted);
+      padding: 80px 0;
+      font-weight: 700;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(17, 24, 39, 0.5);
+      z-index: 39;
+    }
+
+    .main {
+      padding: 32px;
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+      min-width: 0;
+    }
+
+    /* ---------- Buttons ---------- */
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      min-height: 48px;
+      padding: 12px 20px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+      text-align: center;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(1px); }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.28);
+    }
+
+    .btn-primary:hover { background: var(--primary-dark); }
+
+    .btn-secondary {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .btn-light {
+      background: white;
+      color: #374151;
+      border: 1px solid var(--border);
+    }
+
+    .btn-white {
+      background: white;
+      color: var(--primary);
+    }
+
+    .btn-small {
+      min-height: 38px;
+      padding: 7px 14px;
+      font-size: 14px;
+      border-radius: 11px;
+    }
+
+    .listen-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--primary-border);
+      background: white;
+      color: var(--primary);
+      border-radius: 999px;
+      padding: 6px 12px;
+      min-height: 36px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .listen-btn:hover { background: var(--primary-light); }
+
+    .listen-btn.speaking {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .no-speech .listen-btn { display: none; }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    /* ---------- Home ---------- */
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      color: white;
+      border-radius: 26px;
+      padding: 36px;
+      margin-bottom: 24px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -60px; top: -60px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .hero-text { flex: 1; position: relative; z-index: 1; }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      line-height: 1.15;
+      font-weight: 900;
+    }
+
+    .hero p {
+      margin: 0 0 22px;
+      max-width: 560px;
+      color: #e0e7ff;
+      font-size: 17px;
+    }
+
+    .ring {
+      --p: 0;
+      position: relative;
+      z-index: 1;
+      width: 140px; height: 140px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: conic-gradient(#fde68a calc(var(--p) * 1%), rgba(255,255,255,0.18) 0);
+      display: grid;
+      place-items: center;
+    }
+
+    .ring-inner {
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      background: #5b3fe0;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .ring-inner strong { font-size: 30px; font-weight: 900; display: block; }
+    .ring-inner span { font-size: 12px; color: #e0e7ff; }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 900;
+      margin: 32px 0 14px;
+    }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .how-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .how-item .emoji { font-size: 28px; }
+
+    .how-item strong {
+      display: block;
+      margin: 6px 0 2px;
+      font-size: 17px;
+    }
+
+    .how-item span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .lesson-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .lesson-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .lesson-card:hover {
+      transform: translateY(-3px);
+      border-color: #a5b4fc;
+      box-shadow: var(--shadow);
+    }
+
+    .lesson-card.next { border-color: var(--primary); }
+    .lesson-card.done { border-color: var(--success-border); }
+
+    .lesson-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .lesson-emoji {
+      width: 48px; height: 48px;
+      display: grid; place-items: center;
+      border-radius: 14px;
+      background: var(--primary-light);
+      font-size: 24px;
+    }
+
+    .lesson-card.done .lesson-emoji { background: var(--success-bg); }
+
+    .badge {
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .badge.next { background: var(--primary); color: white; }
+    .badge.done { background: var(--success-bg); color: var(--success); }
+
+    .lesson-card small {
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    .lesson-card strong { font-size: 18px; line-height: 1.3; }
+
+    .lesson-card .sub {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .stars {
+      color: var(--star);
+      letter-spacing: 2px;
+      font-size: 16px;
+    }
+
+    .stars .off { color: #d1d5db; }
+
+    /* ---------- Lesson ---------- */
+
+    .crumb {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .lesson-label {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 13px;
+      padding: 6px 12px;
+      border-radius: 999px;
+    }
+
+    .lesson-header {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 22px;
+    }
+
+    .lesson-header .lesson-emoji {
+      width: 64px; height: 64px;
+      font-size: 32px;
+      border-radius: 18px;
+      flex-shrink: 0;
+    }
+
+    .lesson-header h1 {
+      margin: 0;
+      font-size: 32px;
+      line-height: 1.2;
+      font-weight: 900;
+    }
+
+    .lesson-header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    .stepper {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .step-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 50px;
+      border: none;
+      border-radius: 12px;
+      background: transparent;
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--muted);
+      padding: 8px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .step-btn:hover { background: var(--soft); color: var(--text); }
+
+    .step-btn .step-num {
+      width: 28px; height: 28px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: #f3f4f6;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .step-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .step-btn.active .step-num { background: rgba(255,255,255,0.25); }
+
+    .step-btn.done .step-num {
+      background: #22c55e;
+      color: white;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px;
+      margin-bottom: 18px;
+      animation: fadeUp 0.3s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .card-intro {
+      color: var(--muted);
+      margin: 4px 0 16px;
+    }
+
+    .goal-card {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: var(--primary-light);
+      border: 1px solid var(--primary-border);
+      padding: 18px 20px;
+      border-radius: var(--radius);
+      margin-bottom: 18px;
+    }
+
+    .goal-card .emoji { font-size: 28px; line-height: 1; }
+    .goal-card strong { color: var(--primary-dark); }
+    .goal-card p { margin: 4px 0 0; }
+
+    .explanation {
+      font-size: 19px;
+      line-height: 1.75;
+    }
+
+    .explanation p { margin: 0 0 12px; }
+
+    .simple-box {
+      margin-top: 18px;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-left: 5px solid var(--star);
+      padding: 18px 20px;
+      border-radius: 14px;
+      line-height: 1.7;
+      animation: fadeUp 0.3s ease;
+    }
+
+    .simple-box p { margin: 0 0 8px; }
+
+    .plan {
+      margin-top: 18px;
+    }
+
+    .plan summary {
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--muted);
+      padding: 6px 0;
+    }
+
+    .schedule {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .schedule-item {
+      background: var(--soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: center;
+      padding: 12px 6px;
+    }
+
+    .schedule-item strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .schedule-item span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .example-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .example-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--soft);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .example-num {
+      width: 32px; height: 32px;
+      flex-shrink: 0;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    .example-text { flex: 1; min-width: 0; }
+
+    .example-text strong { color: var(--primary-dark); }
+
+    /* ---------- Practice ---------- */
+
+    .q-progress {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .q-dots {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .q-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #e5e7eb;
+    }
+
+    .q-dot.current {
+      background: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-light);
+    }
+
+    .q-dot.right { background: #22c55e; }
+    .q-dot.retry { background: #fb923c; }
+
+    .q-count {
+      margin-left: auto;
+      font-weight: 800;
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .question-card { animation: fadeUp 0.25s ease; }
+
+    .question-card.shake { animation: shake 0.4s ease; }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+    }
+
+    .question-text {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      justify-content: space-between;
+      font-size: 21px;
+      font-weight: 800;
+      line-height: 1.45;
+      margin: 0 0 18px;
+    }
+
+    .answers {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .answer-button {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 2px solid var(--border);
+      background: white;
+      padding: 12px 14px;
+      min-height: 60px;
+      border-radius: 14px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 17px;
+      font-weight: 700;
+      transition: border-color 0.15s, background 0.15s, transform 0.15s;
+    }
+
+    .answer-button:hover:not(:disabled) {
+      border-color: #818cf8;
+      background: #f5f7ff;
+      transform: translateY(-1px);
+    }
+
+    .answer-button:disabled { cursor: default; }
+
+    .answer-letter {
+      width: 34px; height: 34px;
+      flex-shrink: 0;
+      display: grid; place-items: center;
+      border-radius: 10px;
+      background: #f3f4f6;
+      font-weight: 900;
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .answer-button.correct {
+      border-color: #22c55e;
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .answer-button.correct .answer-letter { background: #22c55e; color: white; }
+
+    .answer-button.wrong {
+      border-color: #fca5a5;
+      background: var(--danger-bg);
+      color: var(--danger);
+      opacity: 0.85;
+    }
+
+    .answer-button.wrong .answer-letter { background: #ef4444; color: white; }
+
+    .answer-button.faded { opacity: 0.5; }
+
+    .feedback {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-top: 16px;
+      border-radius: 14px;
+      padding: 14px 16px;
+      line-height: 1.6;
+      animation: fadeUp 0.25s ease;
+    }
+
+    .feedback .emoji { font-size: 26px; line-height: 1.2; }
+    .feedback p { margin: 2px 0 0; }
+
+    .feedback.correct {
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--success);
+    }
+
+    .feedback.wrong {
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      color: var(--warning);
+    }
+
+    .key-tip {
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .key-tip kbd {
+      background: #f3f4f6;
+      border: 1px solid var(--border);
+      border-bottom-width: 2px;
+      border-radius: 6px;
+      padding: 1px 6px;
+      font-family: inherit;
+      font-weight: 800;
+    }
+
+    @media (hover: none) { .key-tip { display: none; } }
+
+    .results {
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .results .big-stars {
+      font-size: 52px;
+      letter-spacing: 6px;
+      color: var(--star);
+    }
+
+    .results .big-stars span {
+      display: inline-block;
+      animation: pop 0.4s ease backwards;
+    }
+
+    .results .big-stars span:nth-child(2) { animation-delay: 0.15s; }
+    .results .big-stars span:nth-child(3) { animation-delay: 0.3s; }
+    .results .big-stars .off { color: #e5e7eb; }
+
+    @keyframes pop {
+      0% { transform: scale(0); }
+      70% { transform: scale(1.25); }
+      100% { transform: scale(1); }
+    }
+
+    .results h3 {
+      font-size: 26px;
+      font-weight: 900;
+      margin: 8px 0 4px;
+    }
+
+    .results p { color: var(--muted); margin: 4px auto; max-width: 480px; }
+
+    .results .button-row { justify-content: center; }
+
+    .score-number {
+      font-size: 44px;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1.1;
+    }
+
+    /* ---------- Review ---------- */
+
+    .checklist {
+      display: grid;
+      gap: 10px;
+      margin: 10px 0 6px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      text-align: left;
+      border: 2px solid var(--border);
+      background: white;
+      border-radius: 14px;
+      padding: 14px 16px;
+      min-height: 58px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .check-item:hover { border-color: #a5b4fc; }
+
+    .check-box {
+      width: 28px; height: 28px;
+      flex-shrink: 0;
+      display: grid; place-items: center;
+      border-radius: 8px;
+      border: 2px solid #d1d5db;
+      color: white;
+      font-weight: 900;
+      font-size: 16px;
+    }
+
+    .check-item.checked {
+      border-color: var(--success-border);
+      background: var(--success-bg);
+    }
+
+    .check-item.checked .check-box {
+      background: #22c55e;
+      border-color: #22c55e;
+    }
+
+    .score-summary {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--soft);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 18px;
+    }
+
+    .score-summary .emoji { font-size: 30px; }
+
+    .score-summary p { margin: 0; color: var(--muted); }
+
+    .message-box {
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-top: 20px;
+      animation: fadeUp 0.3s ease;
+    }
+
+    .message-box h3 { margin: 0 0 6px; font-size: 22px; font-weight: 900; }
+    .message-box p { margin: 4px 0; }
+
+    .message-box.success {
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+    }
+
+    .message-box.success h3 { color: var(--success); }
+
+    .message-box.warning {
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+    }
+
+    .message-box.warning h3 { color: var(--warning); }
+
+    /* ---------- Bottom nav ---------- */
+
+    .lesson-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .lesson-nav .spacer { flex: 1; }
+
+    /* ---------- Confetti ---------- */
+
+    .confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      overflow: hidden;
+    }
+
+    .confetti i {
+      position: absolute;
+      top: -20px;
+      width: 10px;
+      height: 14px;
+      border-radius: 3px;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(720deg); }
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(20px);
+      background: #111827;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 14px;
+      font-weight: 700;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transition: opacity 0.25s, transform 0.25s;
+      z-index: 101;
+      pointer-events: none;
+      max-width: calc(100% - 32px);
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+      }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ---------- Tablet & phone ---------- */
+
+    @media (max-width: 900px) {
+      .menu-btn { display: grid; }
+
+      .layout { display: block; }
+
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        height: 100%;
+        width: min(320px, 86vw);
+        z-index: 40;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        box-shadow: 0 0 40px rgba(0,0,0,0.3);
+      }
+
+      .menu-open .sidebar { transform: none; }
+      .menu-open .overlay { display: block; }
+      .menu-open { overflow: hidden; }
+
+      .close-menu { display: grid; }
+
+      .main { padding: 22px 16px 40px; }
+
+      .how-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      body { font-size: 16px; }
+
+      .topbar { padding: 0 12px; gap: 8px; }
+      .brand { font-size: 17px; }
+      .brand-text { display: none; }
+      .top-progress .bar { width: 70px; }
+      .home-label { display: none; }
+      .user-chip { display: none; }
+      .login-card { padding: 26px 18px; }
+
+      .hero {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        padding: 24px 20px;
+        gap: 18px;
+        border-radius: 22px;
+      }
+
+      .hero h1 { font-size: 27px; }
+
+      .ring { width: 104px; height: 104px; }
+      .ring-inner { width: 80px; height: 80px; }
+      .ring-inner strong { font-size: 22px; }
+      .ring-inner span { font-size: 10px; }
+
+      .hero .btn { width: 100%; }
+
+      .lesson-header h1 { font-size: 25px; }
+      .lesson-header .lesson-emoji { width: 52px; height: 52px; font-size: 26px; }
+
+      .stepper { gap: 4px; padding: 6px; }
+      .step-btn { flex-direction: column; gap: 3px; font-size: 12px; min-height: 58px; padding: 6px 2px; }
+
+      .card { padding: 20px 16px; }
+      .card h2 { font-size: 21px; }
+
+      .explanation { font-size: 17px; }
+
+      .schedule { grid-template-columns: repeat(2, 1fr); }
+
+      .example-item { font-size: 16px; padding: 12px; gap: 10px; }
+
+      .question-text { font-size: 18px; }
+
+      .answers { grid-template-columns: 1fr; }
+
+      .lesson-nav .btn { flex: 1; padding: 12px 10px; font-size: 15px; }
+
+      .results .button-row .btn,
+      .button-row .btn { flex: 1 1 100%; }
+    }
+
+    @media (max-width: 380px) {
+      .how-grid { grid-template-columns: 1fr; }
+      .top-progress .bar { display: none; }
+    }
+  </style>
+</head>
+
+<body class="logged-out">
+
+  <header class="topbar">
+    <button class="icon-btn menu-btn" data-action="open-menu" aria-label="Open lessons menu" aria-controls="sidebar" aria-expanded="false">☰</button>
+
+    <button class="brand" data-action="home" aria-label="English Step-Up home">
+      <span class="brand-icon" aria-hidden="true">🪜</span>
+      <span class="brand-text">English Step-Up</span>
+    </button>
+
+    <div class="top-progress" title="Lessons completed">
+      <div class="bar"><div id="topProgress" class="fill"></div></div>
+      <span id="topProgressText">0/10</span>
+    </div>
+
+    <span class="user-chip" id="userChip" title="Logged in"></span>
+
+    <button class="btn btn-light btn-small home-btn" data-action="home">
+      <span aria-hidden="true">🏠</span><span class="home-label">Home</span>
+    </button>
+  </header>
+
+  <div class="layout">
+
+    <aside class="sidebar" id="sidebar" aria-label="Lessons">
+      <div class="sidebar-head">
+        <h2>Foundation Lessons</h2>
+        <button class="icon-btn close-menu" data-action="close-menu" aria-label="Close lessons menu">✕</button>
+      </div>
+
+      <div class="progress-summary">
+        <strong>Your Progress</strong>
+        <div class="progress-bar">
+          <div id="sidebarProgress" class="progress-fill"></div>
+        </div>
+        <div id="sidebarProgressText" class="progress-text">0 of 10 lessons completed</div>
+      </div>
+
+      <nav id="lessonMenu" class="lesson-menu"></nav>
+
+      <details class="voice-settings" id="voiceSettings">
+        <summary>🔊 Voice settings</summary>
+
+        <label for="voiceSelect">Reading voice</label>
+        <select id="voiceSelect"></select>
+
+        <label for="rateSelect">Speed</label>
+        <select id="rateSelect">
+          <option value="0.8">🐢 Slow — for new words</option>
+          <option value="0.95">🙂 Normal</option>
+          <option value="1.1">🐇 Fast</option>
+        </select>
+
+        <button class="test-voice" data-action="test-voice">▶ Test the voice</button>
+        <p class="voice-note" id="voiceNote"></p>
+      </details>
+
+      <div class="sidebar-user">
+        <span id="sidebarUser"></span>
+        <button class="logout-btn" data-action="logout">Log out</button>
+      </div>
+    </aside>
+
+    <div class="overlay" data-action="close-menu"></div>
+
+    <main class="main" id="content" tabindex="-1"></main>
+
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="lessons.js"></script>
+<script>
+
+/* ===========================
+   LESSON CONTENT
+=========================== */
+
+const lessons = window.LESSONS;
+
+
+/* ===========================
+   SERVER & ACCOUNT
+   Progress is saved on the server so the teacher can see it.
+=========================== */
+
+const TOKEN_KEY = "englishStepUpToken";
+const PASS_PERCENT = 70;
+
+let token = readStored(TOKEN_KEY);
+let student = null;          // { id, name }
+let completedLessons = [];
+let bestScores = {};         // { lessonId: { correct, total } }
+
+function readStored(key) {
+  try { return localStorage.getItem(key); } catch (e) { return null; }
+}
+
+function writeStored(key, value) {
+  try {
+    if (value == null) localStorage.removeItem(key);
+    else localStorage.setItem(key, value);
+  } catch (e) {
+    /* storage blocked — the student just logs in again next visit */
+  }
+}
+
+async function api(path, body) {
+  let response;
+  try {
+    response = await fetch(path, {
+      method: body ? "POST" : "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: body ? JSON.stringify(body) : undefined
+    });
+  } catch (e) {
+    throw new Error("Can't reach the class server. Check the Wi-Fi and try again.");
+  }
+
+  let data = {};
+  try { data = await response.json(); } catch (e) { /* empty body */ }
+
+  if (response.status === 401 && token) {
+    signedOut("Please log in again.");
+    throw new Error(data.error || "Please log in again.");
+  }
+
+  if (!response.ok) throw new Error(data.error || "Something went wrong. Please try again.");
+  return data;
+}
+
+function applyProgress(progress) {
+  completedLessons = progress.completed || [];
+  bestScores = progress.best || {};
+}
+
+function escapeHTML(text) {
+  return String(text).replace(/[&<>"']/g, c => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+  ));
+}
+
+function firstName() {
+  return student ? student.name.split(" ")[0] : "";
+}
+
+function signedIn(data) {
+  if (data.token) {
+    token = data.token;
+    writeStored(TOKEN_KEY, token);
+  }
+  student = data.student;
+  applyProgress(data.progress);
+
+  document.body.classList.remove("logged-out");
+  document.getElementById("userChip").textContent = `👤 ${student.name}`;
+  document.getElementById("sidebarUser").textContent = `👤 ${student.name}`;
+}
+
+function signedOut(message) {
+  token = null;
+  student = null;
+  session = null;
+  completedLessons = [];
+  bestScores = {};
+  writeStored(TOKEN_KEY, null);
+  stopSpeaking();
+  closeMenu();
+  showLogin(message);
+}
+
+async function logout() {
+  try { await api("/api/logout", {}); } catch (e) { /* logging out anyway */ }
+  signedOut();
+}
+
+let loginMode = "new";
+
+function showLogin(message) {
+  document.body.classList.add("logged-out");
+  document.title = "Log in · English Step-Up";
+  if (location.hash) history.replaceState(null, "", location.pathname);
+
+  const isNew = loginMode === "new";
+
+  content.innerHTML = `
+    <div class="login-wrap">
+      <form class="login-card" id="loginForm" novalidate>
+        <div class="big-emoji" aria-hidden="true">🪜</div>
+        <h1>${isNew ? "Welcome! 👋" : "Welcome back! 🌟"}</h1>
+        <p class="lead">${isNew
+          ? "Make your account to save your stars and progress."
+          : "Type your name and your secret PIN."}</p>
+
+        <div class="segmented" role="tablist">
+          <button type="button" class="${isNew ? "active" : ""}" data-action="login-mode" data-mode="new"
+                  role="tab" aria-selected="${isNew}">I'm new here</button>
+          <button type="button" class="${!isNew ? "active" : ""}" data-action="login-mode" data-mode="back"
+                  role="tab" aria-selected="${!isNew}">I've been here before</button>
+        </div>
+
+        ${message ? `<div class="form-error" role="alert">${escapeHTML(message)}</div>` : ""}
+        <div class="form-error hidden" id="loginError" role="alert"></div>
+
+        <div class="field">
+          <label for="loginName">Your full name</label>
+          <input id="loginName" name="name" autocomplete="name" maxlength="40"
+                 placeholder="e.g. Maria Santos" required />
+          ${isNew ? "<small>Use your first and last name so your teacher knows it is you.</small>" : ""}
+        </div>
+
+        <div class="field">
+          <label for="loginPin">${isNew ? "Make a 4-number secret PIN" : "Your 4-number PIN"}</label>
+          <input id="loginPin" name="pin" class="pin-input" type="password" inputmode="numeric"
+                 pattern="[0-9]*" maxlength="4" autocomplete="${isNew ? "new-password" : "current-password"}"
+                 placeholder="••••" required />
+          ${isNew ? "<small>🔒 Remember your PIN! Write it in your notebook.</small>" : "<small>Forgot your PIN? Ask your teacher to reset it.</small>"}
+        </div>
+
+        <button class="btn btn-primary btn-block" type="submit" id="loginSubmit">
+          ${isNew ? "Create my account 🚀" : "Let's go! 🚀"}
+        </button>
+
+        <span class="teacher-link">Teacher? <a href="/teacher">Open the teacher dashboard →</a></span>
+      </form>
+    </div>
+  `;
+
+  document.getElementById("loginForm").addEventListener("submit", submitLogin);
+  document.getElementById("loginPin").addEventListener("input", event => {
+    event.target.value = event.target.value.replace(/\D/g, "").slice(0, 4);
+  });
+}
+
+async function submitLogin(event) {
+  event.preventDefault();
+
+  const name = document.getElementById("loginName").value.trim();
+  const pin = document.getElementById("loginPin").value.trim();
+  const errorBox = document.getElementById("loginError");
+  const submit = document.getElementById("loginSubmit");
+
+  const fail = message => {
+    errorBox.textContent = message;
+    errorBox.classList.remove("hidden");
+  };
+
+  if (name.length < 2) return fail("Please type your name.");
+  if (!/^\d{4}$/.test(pin)) return fail("Your PIN must be exactly 4 numbers.");
+
+  submit.disabled = true;
+
+  try {
+    const data = await api(loginMode === "new" ? "/api/signup" : "/api/login", { name, pin });
+    signedIn(data);
+    showToast(loginMode === "new" ? `Welcome, ${firstName()}! Your account is ready 🎉` : `Hi again, ${firstName()}! 👋`);
+    go("");
+  } catch (e) {
+    fail(e.message);
+    submit.disabled = false;
+  }
+}
+
+
+/* ===========================
+   APP STATE
+=========================== */
+
+const STEPS = [
+  { label: "Learn", icon: "📖" },
+  { label: "Examples", icon: "👀" },
+  { label: "Practice", icon: "✏️" },
+  { label: "Review", icon: "✅" }
+];
+
+let session = null; // the lesson currently open
+let speakTexts = [];
+
+const content = document.getElementById("content");
+
+function getLesson(id) {
+  return lessons.find(lesson => lesson.id === id);
+}
+
+function isDone(id) {
+  return completedLessons.includes(id);
+}
+
+function nextRecommended() {
+  return lessons.find(lesson => !isDone(lesson.id)) || null;
+}
+
+function percentOf(score) {
+  return score ? Math.round((score.correct / score.total) * 100) : 0;
+}
+
+function starCount(percent) {
+  if (percent >= 90) return 3;
+  if (percent >= PASS_PERCENT) return 2;
+  if (percent > 0) return 1;
+  return 0;
+}
+
+function starsHTML(count) {
+  return [0, 1, 2]
+    .map(i => i < count ? "<span>★</span>" : '<span class="off">★</span>')
+    .join("");
+}
+
+function formatText(text) {
+  return text
+    .trim()
+    .split("\n")
+    .filter(line => line.trim() !== "")
+    .map(line => `<p>${line.trim()}</p>`)
+    .join("");
+}
+
+function plainText(html) {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  return div.textContent
+    .replace(/_{2,}/g, " blank ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+
+/* ===========================
+   READ ALOUD (text-to-speech)
+=========================== */
+
+const canSpeak = "speechSynthesis" in window;
+if (!canSpeak) document.body.classList.add("no-speech");
+
+const VOICE_KEY = "englishStepUpVoice";
+const RATE_KEY = "englishStepUpRate";
+
+// Clear, friendly female voices, best first. The natural/online voices (Edge, Chrome)
+// sound the most lively; the rest are good built-in voices on Windows, Mac, iPhone and Android.
+const FEMALE_VOICES = [
+  "ava", "jenny", "aria", "emma", "michelle", "sonia", "libby", "natasha", "clara",
+  "google us english", "google uk english female", "samantha", "allison", "karen",
+  "moira", "tessa", "serena", "victoria", "fiona", "susan", "zira", "hazel",
+  "salli", "joanna", "kendra", "kimberly", "ivy", "nicole", "olivia", "amy", "female"
+];
+const MALE_VOICES = [
+  "david", "mark", "guy", "andrew", "brian", "christopher", "eric", "roger", "steffan",
+  "daniel", "alex", "fred", "ryan", "thomas", "george", "william", "liam", "james", "male"
+];
+
+let englishVoices = [];
+
+function voiceScore(voice) {
+  const name = voice.name.toLowerCase();
+  let score = 0;
+
+  const female = FEMALE_VOICES.findIndex(hint => name.includes(hint));
+  const isFemale = female !== -1;
+  const isMale = !isFemale && MALE_VOICES.some(hint => new RegExp(`\\b${hint}\\b`).test(name));
+
+  if (isFemale) score += 100 - female;
+  if (isMale) score -= 200;
+  if (/natural|online|neural|enhanced|premium/.test(name)) score += 60;
+  if (/^en[-_]us/i.test(voice.lang)) score += 10;
+  else if (/^en[-_](gb|au|ca|ie|nz)/i.test(voice.lang)) score += 5;
+  return score;
+}
+
+function loadVoices() {
+  if (!canSpeak) return;
+
+  englishVoices = window.speechSynthesis.getVoices()
+    .filter(voice => /^en([-_]|$)/i.test(voice.lang))
+    .sort((a, b) => voiceScore(b) - voiceScore(a));
+
+  const select = document.getElementById("voiceSelect");
+  const saved = readStored(VOICE_KEY);
+
+  select.innerHTML = englishVoices.length
+    ? englishVoices.map((voice, i) => `
+        <option value="${escapeHTML(voice.name)}">
+          ${i === 0 ? "⭐ " : ""}${escapeHTML(voice.name.replace(/^Microsoft |^Google /, ""))} (${voice.lang})
+        </option>`).join("")
+    : `<option value="">Device default voice</option>`;
+
+  if (saved && englishVoices.some(v => v.name === saved)) select.value = saved;
+
+  const best = englishVoices[0];
+  document.getElementById("voiceNote").textContent = best && voiceScore(best) > 0
+    ? "⭐ = best female voice found on this device."
+    : "Tip: open this site in Microsoft Edge or Chrome for clearer, more natural female voices.";
+}
+
+function chosenVoice() {
+  const name = document.getElementById("voiceSelect").value;
+  return englishVoices.find(v => v.name === name) || englishVoices[0] || null;
+}
+
+function speechChunks(text) {
+  // Long texts are read sentence by sentence; some browsers stop reading after ~15 seconds.
+  return (text.match(/[^.!?]+[.!?]*["”']?\s*/g) || [text])
+    .map(part => part.trim())
+    .filter(Boolean);
+}
+
+if (canSpeak) {
+  loadVoices();
+  window.speechSynthesis.addEventListener("voiceschanged", loadVoices);
+
+  const rateSelect = document.getElementById("rateSelect");
+  rateSelect.value = readStored(RATE_KEY) || "0.95";
+
+  document.getElementById("voiceSelect").addEventListener("change", event => {
+    writeStored(VOICE_KEY, event.target.value);
+    speakText("Hi! I will read your lessons with this voice.");
+  });
+
+  rateSelect.addEventListener("change", event => {
+    writeStored(RATE_KEY, event.target.value);
+    speakText("This is how fast I will read.");
+  });
+} else {
+  document.getElementById("voiceSettings").classList.add("hidden");
+}
+
+function speakText(text, button) {
+  if (!canSpeak) return;
+  stopSpeaking();
+
+  const voice = chosenVoice();
+  const rate = Number(document.getElementById("rateSelect").value) || 0.95;
+  const chunks = speechChunks(text);
+
+  if (button) button.classList.add("speaking");
+
+  chunks.forEach((chunk, i) => {
+    const utterance = new SpeechSynthesisUtterance(chunk);
+    utterance.lang = voice ? voice.lang : "en-US";
+    if (voice) utterance.voice = voice;
+    utterance.rate = rate;
+    utterance.pitch = 1.1;   // a little brighter and more energetic
+    utterance.volume = 1;
+
+    if (i === chunks.length - 1 && button) {
+      utterance.onend = () => button.classList.remove("speaking");
+    }
+    utterance.onerror = () => button && button.classList.remove("speaking");
+
+    window.speechSynthesis.speak(utterance);
+  });
+}
+
+function listenButton(text, label = "Listen") {
+  speakTexts.push(plainText(text));
+  const index = speakTexts.length - 1;
+  return `<button class="listen-btn" data-action="speak" data-speak="${index}" aria-label="${label ? label + " — read aloud" : "Read aloud"}">🔊${label ? ` <span>${label}</span>` : ""}</button>`;
+}
+
+function stopSpeaking() {
+  if (!canSpeak) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll(".listen-btn.speaking").forEach(b => b.classList.remove("speaking"));
+}
+
+function speak(button) {
+  if (!canSpeak) return;
+
+  const wasSpeaking = button.classList.contains("speaking");
+  stopSpeaking();
+  if (wasSpeaking) return;
+
+  speakText(speakTexts[+button.dataset.speak] || "", button);
+}
+
+
+/* ===========================
+   MENU & PROGRESS
+=========================== */
+
+function renderMenu() {
+  const menu = document.getElementById("lessonMenu");
+  const next = nextRecommended();
+
+  menu.innerHTML = lessons.map(lesson => {
+    const done = isDone(lesson.id);
+    const active = session && session.lesson.id === lesson.id;
+    const status = done ? "Completed" : (next && next.id === lesson.id ? "Up next" : "Not started");
+
+    return `
+      <button class="menu-item ${active ? "active" : ""} ${done ? "completed" : ""}"
+              data-action="open" data-id="${lesson.id}"
+              ${active ? 'aria-current="page"' : ""}>
+        <span class="menu-num">${done ? "✓" : lesson.id}</span>
+        <span class="menu-label">
+          <span>${lesson.icon} ${lesson.title}</span>
+          <small>${status}</small>
+        </span>
+      </button>
+    `;
+  }).join("");
+
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = lessons.length;
+  const done = completedLessons.length;
+  const percent = Math.round((done / total) * 100);
+
+  document.getElementById("sidebarProgress").style.width = percent + "%";
+  document.getElementById("sidebarProgressText").textContent = `${done} of ${total} lessons completed`;
+  document.getElementById("topProgress").style.width = percent + "%";
+  document.getElementById("topProgressText").textContent = `${done}/${total}`;
+}
+
+function openMenu() {
+  document.body.classList.add("menu-open");
+  document.querySelector(".menu-btn").setAttribute("aria-expanded", "true");
+  const active = document.querySelector(".menu-item.active") || document.querySelector(".menu-item");
+  if (active) active.focus();
+}
+
+function closeMenu() {
+  if (!document.body.classList.contains("menu-open")) return;
+  document.body.classList.remove("menu-open");
+  document.querySelector(".menu-btn").setAttribute("aria-expanded", "false");
+}
+
+
+/* ===========================
+   HOME PAGE
+=========================== */
+
+function showHome() {
+  stopSpeaking();
+  session = null;
+  speakTexts = [];
+  renderMenu();
+  document.title = "English Step-Up";
+
+  const total = lessons.length;
+  const done = completedLessons.length;
+  const percent = Math.round((done / total) * 100);
+  const next = nextRecommended();
+
+  let heroTitle = `Hello, ${escapeHTML(firstName())}! 👋`;
+  let heroText = "Learn English one small step at a time. Read easy explanations, listen to examples, and practice with friendly questions.";
+  let heroButton = `<button class="btn btn-white" data-action="open" data-id="1">🚀 Start Lesson 1</button>`;
+
+  if (done > 0 && next) {
+    heroTitle = `Welcome back, ${escapeHTML(firstName())}! 🌟`;
+    heroText = `Great job — you have finished ${done} of ${total} lessons. Keep going, you are doing well!`;
+    heroButton = `<button class="btn btn-white" data-action="open" data-id="${next.id}">▶ Continue: Lesson ${next.id} — ${next.title}</button>`;
+  }
+
+  if (!next) {
+    heroTitle = `You did it, ${escapeHTML(firstName())}! 🏆`;
+    heroText = "You finished every Foundation lesson. Practice any lesson again to earn more stars.";
+    heroButton = `<button class="btn btn-white" data-action="open" data-id="10">🔁 Review the final lesson</button>`;
+  }
+
+  content.innerHTML = `
+    <section class="hero">
+      <div class="hero-text">
+        <h1>${heroTitle}</h1>
+        <p>${heroText}</p>
+        ${heroButton}
+      </div>
+
+      <div class="ring" style="--p:${percent}" role="img" aria-label="${percent}% of lessons completed">
+        <div class="ring-inner">
+          <div>
+            <strong>${done}/${total}</strong>
+            <span>lessons done</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <h2 class="section-title">How each lesson works</h2>
+
+    <div class="how-grid">
+      <div class="how-item">
+        <div class="emoji">📖</div>
+        <strong>1. Learn</strong>
+        <span>Read a short, easy explanation.</span>
+      </div>
+      <div class="how-item">
+        <div class="emoji">👀</div>
+        <strong>2. Examples</strong>
+        <span>See and listen to real sentences.</span>
+      </div>
+      <div class="how-item">
+        <div class="emoji">✏️</div>
+        <strong>3. Practice</strong>
+        <span>Answer one question at a time.</span>
+      </div>
+      <div class="how-item">
+        <div class="emoji">✅</div>
+        <strong>4. Review</strong>
+        <span>Check yourself and earn stars.</span>
+      </div>
+    </div>
+
+    <h2 class="section-title">Foundation lessons</h2>
+
+    <div class="lesson-grid">
+      ${lessons.map(lesson => {
+        const isComplete = isDone(lesson.id);
+        const isNext = next && next.id === lesson.id;
+        const best = bestScores[lesson.id];
+        const stars = best ? starCount(percentOf(best)) : 0;
+
+        let badge = `<span class="badge">Start</span>`;
+        if (isNext) badge = `<span class="badge next">Up next</span>`;
+        if (isComplete) badge = `<span class="badge done">✓ Done</span>`;
+
+        return `
+          <button class="lesson-card ${isComplete ? "done" : ""} ${isNext ? "next" : ""}"
+                  data-action="open" data-id="${lesson.id}">
+            <div class="lesson-card-top">
+              <span class="lesson-emoji" aria-hidden="true">${lesson.icon}</span>
+              ${badge}
+            </div>
+            <small>Lesson ${lesson.id} · About 60 minutes</small>
+            <strong>${lesson.title}</strong>
+            <span class="sub">${lesson.subtitle}</span>
+            ${best ? `<span class="stars" aria-label="${stars} of 3 stars">${starsHTML(stars)}</span>` : ""}
+          </button>
+        `;
+      }).join("")}
+    </div>
+  `;
+
+  window.scrollTo({ top: 0 });
+}
+
+
+/* ===========================
+   LESSON PAGE
+=========================== */
+
+function openLesson(id) {
+  const lesson = getLesson(id);
+  if (!lesson) return showHome();
+
+  stopSpeaking();
+
+  session = {
+    lesson,
+    step: 0,
+    visited: [true, false, false, false],
+    showSimple: false,
+    q: 0,
+    firstTry: {},
+    solved: {},
+    wrongPicks: {},
+    shake: false,
+    showResults: false,
+    lastResult: null,
+    checks: [false, false, false],
+    finishMessage: null
+  };
+
+  document.title = `Lesson ${lesson.id}: ${lesson.title} · English Step-Up`;
+  renderMenu();
+  renderLesson();
+  window.scrollTo({ top: 0 });
+}
+
+function renderLesson() {
+  const { lesson } = session;
+
+  content.innerHTML = `
+    <div class="crumb">
+      <span class="lesson-label">Lesson ${lesson.id} of ${lessons.length} · 60 minutes</span>
+      ${isDone(lesson.id) ? '<span class="badge done">✓ Completed</span>' : ""}
+    </div>
+
+    <div class="lesson-header">
+      <span class="lesson-emoji" aria-hidden="true">${lesson.icon}</span>
+      <div>
+        <h1>${lesson.title}</h1>
+        <p>${lesson.subtitle}</p>
+      </div>
+    </div>
+
+    <nav class="stepper" id="stepper" aria-label="Lesson steps"></nav>
+
+    <div id="panel"></div>
+
+    <div class="lesson-nav" id="lessonNav"></div>
+  `;
+
+  renderStep();
+}
+
+function renderStepper() {
+  document.getElementById("stepper").innerHTML = STEPS.map((step, index) => {
+    const active = session.step === index;
+    const done = !active && session.visited[index] && index < session.step;
+    return `
+      <button class="step-btn ${active ? "active" : ""} ${done ? "done" : ""}"
+              data-action="step" data-step="${index}"
+              ${active ? 'aria-current="step"' : ""}>
+        <span class="step-num">${done ? "✓" : index + 1}</span>
+        <span>${step.label}</span>
+      </button>
+    `;
+  }).join("");
+}
+
+function renderStep() {
+  speakTexts = [];
+  renderStepper();
+
+  const panel = document.getElementById("panel");
+
+  if (session.step === 0) panel.innerHTML = learnHTML();
+  if (session.step === 1) panel.innerHTML = examplesHTML();
+  if (session.step === 2) panel.innerHTML = practiceHTML();
+  if (session.step === 3) panel.innerHTML = reviewHTML();
+
+  renderNav();
+}
+
+function goToStep(index) {
+  stopSpeaking();
+  session.step = Math.max(0, Math.min(STEPS.length - 1, index));
+  session.visited[session.step] = true;
+  renderStep();
+  document.getElementById("stepper").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function renderNav() {
+  const { lesson, step } = session;
+  const nav = document.getElementById("lessonNav");
+
+  const back = step > 0
+    ? `<button class="btn btn-light" data-action="step" data-step="${step - 1}">← ${STEPS[step - 1].label}</button>`
+    : (lesson.id > 1
+        ? `<button class="btn btn-light" data-action="open" data-id="${lesson.id - 1}">← Lesson ${lesson.id - 1}</button>`
+        : `<button class="btn btn-light" data-action="home">← Home</button>`);
+
+  let forward;
+  if (step < STEPS.length - 1) {
+    forward = `<button class="btn btn-primary" data-action="step" data-step="${step + 1}">Next: ${STEPS[step + 1].label} →</button>`;
+  } else if (lesson.id < lessons.length) {
+    forward = `<button class="btn btn-light" data-action="open" data-id="${lesson.id + 1}">Lesson ${lesson.id + 1} →</button>`;
+  } else {
+    forward = `<button class="btn btn-light" data-action="home">Home →</button>`;
+  }
+
+  nav.innerHTML = `${back}<span class="spacer"></span>${forward}`;
+}
+
+
+/* ---------- Step 1: Learn ---------- */
+
+function learnHTML() {
+  const { lesson } = session;
+
+  return `
+    <div class="goal-card">
+      <span class="emoji" aria-hidden="true">🎯</span>
+      <div>
+        <strong>Today's Goal</strong>
+        <p>${lesson.goal}</p>
+      </div>
+    </div>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>📖 Easy Explanation</h2>
+        ${listenButton(lesson.explanation)}
+      </div>
+
+      <div class="explanation">
+        ${formatText(lesson.explanation)}
+      </div>
+
+      <div class="button-row">
+        <button class="btn btn-secondary" data-action="toggle-simple" aria-expanded="${session.showSimple}">
+          ${session.showSimple ? "🙈 Hide simpler explanation" : "🤔 I'm confused — explain again"}
+        </button>
+      </div>
+
+      ${session.showSimple ? `
+        <div class="simple-box">
+          <div class="card-head">
+            <strong>💡 Even Simpler Explanation</strong>
+            ${listenButton(lesson.explainAgain)}
+          </div>
+          ${formatText(lesson.explainAgain)}
+        </div>
+      ` : ""}
+
+      <details class="plan">
+        <summary>🕒 Lesson plan (60 minutes)</summary>
+        <div class="schedule">
+          <div class="schedule-item"><strong>Warm-Up</strong><span>10 min</span></div>
+          <div class="schedule-item"><strong>Explanation</strong><span>15 min</span></div>
+          <div class="schedule-item"><strong>Examples</strong><span>10 min</span></div>
+          <div class="schedule-item"><strong>Practice</strong><span>20 min</span></div>
+          <div class="schedule-item"><strong>Review</strong><span>5 min</span></div>
+        </div>
+      </details>
+    </section>
+  `;
+}
+
+
+/* ---------- Step 2: Examples ---------- */
+
+function examplesHTML() {
+  const { lesson } = session;
+
+  return `
+    <section class="card">
+      <div class="card-head">
+        <h2>👀 Examples</h2>
+        ${listenButton(lesson.examples.join(". "), "Listen to all")}
+      </div>
+
+      <p class="card-intro">
+        Read each example slowly. Tap 🔊 to hear it. Try to understand why each example works.
+      </p>
+
+      <div class="example-list">
+        ${lesson.examples.map((example, index) => `
+          <div class="example-item">
+            <span class="example-num">${index + 1}</span>
+            <span class="example-text">${example}</span>
+            ${listenButton(example, "")}
+          </div>
+        `).join("")}
+      </div>
+    </section>
+  `;
+}
+
+
+/* ---------- Step 3: Practice ---------- */
+
+function practiceHTML() {
+  const { lesson } = session;
+  const total = lesson.questions.length;
+
+  if (session.showResults) return resultsHTML();
+
+  const index = session.q;
+  const question = lesson.questions[index];
+  const solved = !!session.solved[index];
+  const wrong = session.wrongPicks[index] || [];
+
+  const dots = lesson.questions.map((_, i) => {
+    let cls = "";
+    if (session.solved[i]) cls = session.firstTry[i] ? "right" : "retry";
+    if (i === index) cls += " current";
+    return `<span class="q-dot ${cls}"></span>`;
+  }).join("");
+
+  const options = question.options.map((option, i) => {
+    let cls = "";
+    if (wrong.includes(i)) cls = "wrong";
+    if (solved && i === question.answer) cls = "correct";
+    if (solved && i !== question.answer && !wrong.includes(i)) cls = "faded";
+    const disabled = solved || wrong.includes(i);
+
+    return `
+      <button class="answer-button ${cls}" data-action="answer" data-option="${i}" ${disabled ? "disabled" : ""}>
+        <span class="answer-letter">${String.fromCharCode(65 + i)}</span>
+        <span>${option}</span>
+      </button>
+    `;
+  }).join("");
+
+  let feedback = "";
+
+  if (solved) {
+    const firstTry = session.firstTry[index];
+    feedback = `
+      <div class="feedback correct" role="status">
+        <span class="emoji" aria-hidden="true">${firstTry ? "🎉" : "👍"}</span>
+        <div>
+          <strong>${firstTry ? "Correct! Great job!" : "Correct! You got it this time."}</strong>
+          <p>${question.explanation}</p>
+        </div>
+      </div>
+      <div class="button-row">
+        <button class="btn btn-primary" data-action="next-question" id="nextQuestion">
+          ${index < total - 1 ? "Next question →" : "See my score 🏁"}
+        </button>
+      </div>
+    `;
+  } else if (wrong.length > 0) {
+    feedback = `
+      <div class="feedback wrong" role="status">
+        <span class="emoji" aria-hidden="true">💪</span>
+        <div>
+          <strong>Not quite — try another answer!</strong>
+          <p>${wrong.length >= 2
+            ? `Hint: ${question.explanation}`
+            : "Read the question again slowly. Mistakes help us learn."}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  const shake = session.shake;
+  session.shake = false;
+
+  return `
+    <section class="card">
+      <div class="card-head">
+        <h2>✏️ Practice</h2>
+      </div>
+
+      <div class="q-progress">
+        <div class="q-dots" aria-hidden="true">${dots}</div>
+        <span class="q-count">Question ${index + 1} of ${total}</span>
+      </div>
+
+      <div class="question-card ${shake ? "shake" : ""}">
+        <div class="question-text">
+          <span>${question.question}</span>
+          ${listenButton(question.question, "")}
+        </div>
+
+        <div class="answers">${options}</div>
+
+        ${feedback}
+
+        <div class="key-tip">
+          Tip: press <kbd>1</kbd>–<kbd>4</kbd> or <kbd>A</kbd>–<kbd>D</kbd> to answer, <kbd>Enter</kbd> for next.
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function answerQuestion(optionIndex) {
+  const index = session.q;
+  const question = session.lesson.questions[index];
+
+  if (session.solved[index]) return;
+
+  const wrong = session.wrongPicks[index] || [];
+  if (wrong.includes(optionIndex)) return;
+
+  if (!(index in session.firstTry)) {
+    session.firstTry[index] = optionIndex === question.answer;
+  }
+
+  if (optionIndex === question.answer) {
+    session.solved[index] = true;
+  } else {
+    session.wrongPicks[index] = [...wrong, optionIndex];
+    session.shake = true;
+  }
+
+  renderStep();
+
+  const nextBtn = document.getElementById("nextQuestion");
+  if (nextBtn) nextBtn.focus({ preventScroll: true });
+}
+
+function nextQuestion() {
+  const total = session.lesson.questions.length;
+
+  if (session.q < total - 1) {
+    session.q += 1;
+    renderStep();
+    return;
+  }
+
+  // Practice finished — score = questions answered right on the first try
+  const correct = Object.values(session.firstTry).filter(Boolean).length;
+  const result = { correct, total };
+  session.lastResult = result;
+  session.showResults = true;
+  session.saveState = "saving";
+
+  if (percentOf(result) >= PASS_PERCENT) celebrate(40);
+
+  renderStep();
+  saveAttempt(session);
+}
+
+async function saveAttempt(practice) {
+  const answers = practice.lesson.questions.map((_, i) => !!practice.firstTry[i]);
+  practice.saveState = "saving";
+  updateSaveStatus(practice);
+
+  try {
+    const data = await api("/api/attempts", { lessonId: practice.lesson.id, answers });
+    applyProgress(data.progress);
+    practice.saveState = "saved";
+    renderMenu();
+  } catch (e) {
+    practice.saveState = "error";
+    practice.saveError = e.message;
+  }
+
+  updateSaveStatus(practice);
+}
+
+function saveStatusHTML(practice) {
+  if (practice.saveState === "saved") {
+    return `<span class="save-status ok">✓ Score saved — your teacher can see it.</span>`;
+  }
+  if (practice.saveState === "error") {
+    return `<span class="save-status error">⚠ Not saved: ${escapeHTML(practice.saveError)}
+      <button class="link-btn" data-action="retry-save">Try again</button></span>`;
+  }
+  return `<span class="save-status">⏳ Saving your score…</span>`;
+}
+
+function updateSaveStatus(practice) {
+  const box = document.getElementById("saveStatus");
+  if (box && session === practice) box.innerHTML = saveStatusHTML(practice);
+}
+
+function resultsHTML() {
+  const { correct, total } = session.lastResult;
+  const percent = percentOf(session.lastResult);
+  const stars = starCount(percent);
+  const passed = percent >= PASS_PERCENT;
+
+  let title = "Keep practicing! 💪";
+  let message = "You are still learning — that is okay! Read the lesson again, then try once more.";
+
+  if (passed) {
+    title = stars === 3 ? "Amazing work! 🌟" : "Well done! 🎉";
+    message = "You understood the main idea. Go to Review to finish the lesson.";
+  }
+
+  return `
+    <section class="card">
+      <div class="results" role="status">
+        <div class="big-stars" aria-label="${stars} of 3 stars">${starsHTML(stars)}</div>
+        <h3>${title}</h3>
+        <div class="score-number">${correct} / ${total}</div>
+        <p>correct on the first try (${percent}%)</p>
+        <p>${message}</p>
+        <div id="saveStatus">${saveStatusHTML(session)}</div>
+
+        <div class="button-row">
+          ${passed
+            ? `<button class="btn btn-primary" data-action="step" data-step="3">Go to Review →</button>
+               <button class="btn btn-light" data-action="retry">🔁 Practice again</button>`
+            : `<button class="btn btn-primary" data-action="retry">🔁 Try again</button>
+               <button class="btn btn-light" data-action="step" data-step="0">📖 Read the lesson again</button>`}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function retryPractice() {
+  Object.assign(session, {
+    q: 0,
+    firstTry: {},
+    solved: {},
+    wrongPicks: {},
+    showResults: false,
+    lastResult: null
+  });
+  renderStep();
+}
+
+
+/* ---------- Step 4: Review ---------- */
+
+function reviewHTML() {
+  const { lesson } = session;
+  const best = bestScores[lesson.id];
+  const items = [
+    "I understand today's main idea.",
+    "I can recognize it in an example.",
+    "I can answer simple questions about it."
+  ];
+
+  let summary = `
+    <div class="score-summary">
+      <span class="emoji" aria-hidden="true">✏️</span>
+      <div>
+        <strong>No practice score yet</strong>
+        <p>Do the Practice questions first, then come back here.</p>
+      </div>
+    </div>
+  `;
+
+  if (best) {
+    const percent = percentOf(best);
+    summary = `
+      <div class="score-summary">
+        <span class="stars" style="font-size:24px" aria-label="${starCount(percent)} of 3 stars">${starsHTML(starCount(percent))}</span>
+        <div>
+          <strong>Best practice score: ${best.correct} / ${best.total}</strong>
+          <p>${percent >= PASS_PERCENT ? "You passed the practice. 👏" : `You need ${PASS_PERCENT}% to finish. Try the practice again.`}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <section class="card">
+      <div class="card-head">
+        <h2>✅ Lesson Review</h2>
+      </div>
+
+      <p class="card-intro">Before finishing, tap each sentence that is true for you:</p>
+
+      <div class="checklist">
+        ${items.map((text, i) => `
+          <button class="check-item ${session.checks[i] ? "checked" : ""}"
+                  data-action="check" data-check="${i}"
+                  role="checkbox" aria-checked="${session.checks[i]}">
+            <span class="check-box">${session.checks[i] ? "✓" : ""}</span>
+            <span>${text}</span>
+          </button>
+        `).join("")}
+      </div>
+
+      ${summary}
+
+      <div class="button-row">
+        <button class="btn btn-primary" data-action="finish">🏁 Finish Lesson</button>
+      </div>
+
+      ${session.finishMessage || ""}
+    </section>
+  `;
+}
+
+async function finishLesson() {
+  const current = session;
+  const { lesson } = current;
+  const best = bestScores[lesson.id];
+  const percent = percentOf(best);
+
+  if (!best) {
+    session.finishMessage = `
+      <div class="message-box warning" role="status">
+        <h3>Practice first ✏️</h3>
+        <p>Answer the practice questions before finishing this lesson.</p>
+        <div class="button-row">
+          <button class="btn btn-primary" data-action="step" data-step="2">Go to Practice →</button>
+        </div>
+      </div>
+    `;
+  } else if (percent >= PASS_PERCENT) {
+    const firstTime = !isDone(lesson.id);
+    const button = document.querySelector('[data-action="finish"]');
+    if (button) button.disabled = true;
+
+    try {
+      const data = await api("/api/complete", { lessonId: lesson.id });
+      applyProgress(data.progress);
+    } catch (e) {
+      if (session !== current) return;
+      session.finishMessage = `
+        <div class="message-box warning" role="status">
+          <h3>Could not save 😕</h3>
+          <p>${escapeHTML(e.message)}</p>
+          <div class="button-row">
+            <button class="btn btn-primary" data-action="finish">🔁 Try again</button>
+          </div>
+        </div>
+      `;
+      return showFinishMessage();
+    }
+
+    if (session !== current) return;
+
+    const isLast = lesson.id === lessons.length;
+
+    session.finishMessage = `
+      <div class="message-box success" role="status">
+        <h3>${isLast ? "Foundation Level complete! 🏆" : "Lesson completed! 🎉"}</h3>
+        <p>You scored <strong>${best.correct} out of ${best.total}</strong> on the practice questions.</p>
+        <p>You understood the main idea well enough to continue.</p>
+        <div class="button-row">
+          ${isLast
+            ? `<button class="btn btn-primary" data-action="home">🏠 Back to Home</button>`
+            : `<button class="btn btn-primary" data-action="open" data-id="${lesson.id + 1}">Continue to Lesson ${lesson.id + 1} →</button>`}
+        </div>
+      </div>
+    `;
+
+    celebrate(isLast ? 160 : 90);
+    if (firstTime) showToast(`✓ Lesson ${lesson.id} saved to your progress`);
+    renderMenu();
+  } else {
+    session.finishMessage = `
+      <div class="message-box warning" role="status">
+        <h3>A little more practice 💪</h3>
+        <p>Your best score is <strong>${best.correct} out of ${best.total}</strong>. You need ${PASS_PERCENT}% to finish.</p>
+        <p>Read the explanation again, review the examples, and try the questions one more time.</p>
+        <div class="button-row">
+          <button class="btn btn-secondary" data-action="step" data-step="0">📖 Review lesson</button>
+          <button class="btn btn-primary" data-action="practice-again">🔁 Practice again</button>
+        </div>
+      </div>
+    `;
+  }
+
+  showFinishMessage();
+}
+
+function showFinishMessage() {
+  renderStep();
+  const message = document.querySelector(".message-box");
+  if (message) message.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+
+/* ===========================
+   FUN EXTRAS
+=========================== */
+
+function celebrate(count) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const colors = ["#4f46e5", "#7c3aed", "#f59e0b", "#22c55e", "#ec4899", "#06b6d4"];
+  const box = document.createElement("div");
+  box.className = "confetti";
+
+  for (let i = 0; i < count; i++) {
+    const piece = document.createElement("i");
+    piece.style.left = Math.random() * 100 + "%";
+    piece.style.background = colors[i % colors.length];
+    piece.style.animationDuration = 1.8 + Math.random() * 1.6 + "s";
+    piece.style.animationDelay = Math.random() * 0.4 + "s";
+    piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+    box.appendChild(piece);
+  }
+
+  document.body.appendChild(box);
+  setTimeout(() => box.remove(), 4000);
+}
+
+let toastTimer;
+
+function showToast(text) {
+  const toast = document.getElementById("toast");
+  toast.textContent = text;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+}
+
+/* ===========================
+   NAVIGATION (supports the phone's Back button)
+=========================== */
+
+function go(hash) {
+  closeMenu();
+  const current = location.hash.replace(/^#/, "");
+  if (current === hash) {
+    route();
+  } else {
+    location.hash = hash;
+  }
+}
+
+function route() {
+  if (!student) return showLogin();
+
+  const match = location.hash.match(/^#lesson-(\d+)$/);
+  const id = match ? Number(match[1]) : null;
+
+  if (id && getLesson(id)) openLesson(id);
+  else showHome();
+}
+
+window.addEventListener("hashchange", route);
+
+
+/* ===========================
+   CLICKS & KEYBOARD
+=========================== */
+
+document.addEventListener("click", event => {
+  const el = event.target.closest("[data-action]");
+  if (!el) return;
+
+  const action = el.dataset.action;
+
+  switch (action) {
+    case "home":           go(""); break;
+    case "open":           go(`lesson-${el.dataset.id}`); break;
+    case "open-menu":      openMenu(); break;
+    case "close-menu":     closeMenu(); break;
+    case "logout":         logout(); break;
+    case "login-mode":
+      loginMode = el.dataset.mode;
+      showLogin();
+      break;
+    case "test-voice":
+      speakText("Hello! I'm your English helper. Let's learn together. You can do it!");
+      break;
+    case "retry-save":     saveAttempt(session); break;
+    case "start":          start(); break;
+    case "speak":          speak(el); break;
+    case "step":           goToStep(Number(el.dataset.step)); break;
+    case "toggle-simple":
+      session.showSimple = !session.showSimple;
+      renderStep();
+      break;
+    case "answer":         answerQuestion(Number(el.dataset.option)); break;
+    case "next-question":  nextQuestion(); break;
+    case "retry":          retryPractice(); break;
+    case "practice-again":
+      session.finishMessage = null;
+      retryPractice();
+      goToStep(2);
+      break;
+    case "check":
+      session.checks[Number(el.dataset.check)] = !session.checks[Number(el.dataset.check)];
+      renderStep();
+      break;
+    case "finish":         finishLesson(); break;
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") closeMenu();
+
+  if (!session || session.step !== 2 || session.showResults) return;
+  if (event.ctrlKey || event.metaKey || event.altKey) return;
+  if (document.body.classList.contains("menu-open")) return;
+
+  const key = event.key.toLowerCase();
+  const map = { "1": 0, "2": 1, "3": 2, "4": 3, a: 0, b: 1, c: 2, d: 3 };
+
+  if (key in map && map[key] < session.lesson.questions[session.q].options.length) {
+    event.preventDefault();
+    answerQuestion(map[key]);
+  } else if (key === "enter" && session.solved[session.q]) {
+    // Let a focused button handle its own Enter press
+    if (document.activeElement && document.activeElement.tagName === "BUTTON") return;
+    event.preventDefault();
+    nextQuestion();
+  }
+});
+
+
+/* ===========================
+   START
+=========================== */
+
+async function start() {
+  if (!token) return showLogin();
+
+  content.innerHTML = `<div class="loading">Loading your lessons… ⏳</div>`;
+
+  try {
+    signedIn(await api("/api/me"));
+    route();
+  } catch (e) {
+    if (!token) return; // the server said to log in again; the login screen is already showing
+    content.innerHTML = `
+      <div class="loading">
+        <p>😕 ${escapeHTML(e.message)}</p>
+        <button class="btn btn-primary" data-action="start">🔁 Try again</button>
+      </div>
+    `;
+  }
+}
+
+start();
+
+</script>
+
+</body>
+</html>
