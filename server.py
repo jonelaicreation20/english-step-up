@@ -675,6 +675,13 @@ def lan_address():
 
 
 def main():
+    # Show messages straight away, so hosting logs are readable while the site runs.
+    try:
+        sys.stdout.reconfigure(line_buffering=True)
+        sys.stderr.reconfigure(line_buffering=True)
+    except AttributeError:
+        pass
+
     db.init(SCHEMA)
 
     if "--reset-teacher-password" in sys.argv:
