@@ -16,7 +16,36 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(ROOT, "data")
 SQLITE_PATH = os.path.join(DATA_DIR, "english-step-up.db")
 
-DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
+
+def _load_env_file():
+    """
+    Read private settings from a file named .env next to this one, if it exists.
+
+    Each line looks like  NAME=value  and lines starting with # are notes.
+    This file stays on your computer: .gitignore keeps it out of GitHub.
+    Settings already set by the host (for example on Render) always win.
+    """
+    path = os.path.join(ROOT, ".env")
+    if not os.path.exists(path):
+        return
+
+    with open(path, encoding="utf-8") as handle:
+        for line in handle:
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            name, value = line.split("=", 1)
+            value = value.strip().strip('"').strip("'")
+            if value:
+                os.environ.setdefault(name.strip(), value)
+
+
+_load_env_file()
+
+# Neon gives two addresses. The pooled one copes better with a whole class at once,
+# so use it when it is there and fall back to the plain one otherwise.
+DATABASE_URL = (os.environ.get("DATABASE_URL_POOLED", "").strip()
+                or os.environ.get("DATABASE_URL", "").strip())
 USING_POSTGRES = bool(DATABASE_URL)
 
 if USING_POSTGRES:

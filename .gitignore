@@ -1,6 +1,9 @@
 # Student accounts, PINs and scores — never upload these
 data/
 
+# Private settings: database password, teacher password, class code
+.env
+
 # Python cache
 __pycache__/
 *.pyc
