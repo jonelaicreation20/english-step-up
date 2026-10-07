@@ -17,7 +17,6 @@ import os
 import re
 import secrets
 import socket
-import sqlite3
 import sys
 import threading
 import time
@@ -25,12 +24,18 @@ from datetime import datetime, timezone
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
+import db
+
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PUBLIC_DIR = os.path.join(ROOT, "public")
-DATA_DIR = os.path.join(ROOT, "data")
-DB_PATH = os.path.join(DATA_DIR, "english-step-up.db")
 
 PORT = int(os.environ.get("PORT", "5500"))
+
+# Optional settings, used when the site is online (set these on Render).
+# TEACHER_PASSWORD: fixes the teacher password, so nobody else can claim the dashboard.
+# CLASS_CODE: a word your students must type to make an account, so strangers cannot.
+TEACHER_PASSWORD = os.environ.get("TEACHER_PASSWORD", "").strip()
+CLASS_CODE = os.environ.get("CLASS_CODE", "").strip()
 LESSON_COUNT = 10
 PASS_PERCENT = 70
 SESSION_SECONDS = 60 * 24 * 3600  # stay logged in for 60 days
@@ -102,21 +107,7 @@ def local_time(iso):
 
 
 def connect():
-    conn = sqlite3.connect(DB_PATH, timeout=10)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA foreign_keys = ON")
-    return conn
-
-
-def init_db():
-    os.makedirs(DATA_DIR, exist_ok=True)
-    conn = connect()
-    try:
-        conn.execute("PRAGMA journal_mode = WAL")
-        conn.executescript(SCHEMA)
-        conn.commit()
-    finally:
-        conn.close()
+    return db.connect()
 
 
 def hash_secret(secret, salt=None):
@@ -254,7 +245,7 @@ def class_overview(conn):
             "completed": [],
             "lessons": {},
         }
-        for row in conn.execute("SELECT * FROM students ORDER BY name COLLATE NOCASE")
+        for row in conn.execute("SELECT * FROM students ORDER BY LOWER(name)")
     }
 
     for row in conn.execute("SELECT * FROM completions ORDER BY lesson_id"):
@@ -303,6 +294,10 @@ def route(method, pattern, auth=None):
 
 @route("POST", "/api/signup")
 def signup(ctx):
+    if CLASS_CODE and not hmac.compare_digest(str(ctx.body.get("classCode") or "").strip().lower(),
+                                              CLASS_CODE.lower()):
+        raise ApiError(403, "That class code is not right. Ask your teacher for today's class code.")
+
     name = clean_name(ctx.body.get("name"))
     pin = clean_pin(ctx.body.get("pin"))
     key = name.lower()
@@ -311,13 +306,13 @@ def signup(ctx):
         raise ApiError(409, "That name is already used. If it is you, choose \"I've been here before\". "
                             "If not, add your last name or an initial.")
 
-    cur = ctx.conn.execute(
+    student_id = ctx.conn.insert(
         "INSERT INTO students (name, name_key, pin_hash, created_at, last_active) VALUES (?, ?, ?, ?, ?)",
         (name, key, hash_secret(pin), now_iso(), now_iso()),
     )
-    token = create_session(ctx.conn, student_id=cur.lastrowid)
-    return {"token": token, "student": {"id": cur.lastrowid, "name": name},
-            "progress": student_progress(ctx.conn, cur.lastrowid)}
+    token = create_session(ctx.conn, student_id=student_id)
+    return {"token": token, "student": {"id": student_id, "name": name},
+            "progress": student_progress(ctx.conn, student_id)}
 
 
 @route("POST", "/api/login")
@@ -384,7 +379,8 @@ def complete_lesson(ctx):
         raise ApiError(400, f"You need at least {PASS_PERCENT}% in Practice to finish this lesson.")
 
     ctx.conn.execute(
-        "INSERT OR IGNORE INTO completions (student_id, lesson_id, completed_at) VALUES (?, ?, ?)",
+        "INSERT INTO completions (student_id, lesson_id, completed_at) VALUES (?, ?, ?) "
+        "ON CONFLICT DO NOTHING",
         (student_id, lesson_id, now_iso()),
     )
     touch_student(ctx.conn, student_id)
@@ -393,9 +389,15 @@ def complete_lesson(ctx):
 
 # ----- teacher
 
+@route("GET", "/api/config")
+def site_config(ctx):
+    """What the student page needs to know before anyone logs in."""
+    return {"requiresClassCode": bool(CLASS_CODE)}
+
+
 @route("GET", "/api/teacher/status")
 def teacher_status(ctx):
-    return {"hasPassword": get_setting(ctx.conn, "teacher_password") is not None}
+    return {"hasPassword": bool(TEACHER_PASSWORD) or get_setting(ctx.conn, "teacher_password") is not None}
 
 
 def check_new_password(value):
@@ -407,6 +409,8 @@ def check_new_password(value):
 
 @route("POST", "/api/teacher/setup")
 def teacher_setup(ctx):
+    if TEACHER_PASSWORD:
+        raise ApiError(409, "The teacher password is set on the server. Please log in with it.")
     if get_setting(ctx.conn, "teacher_password") is not None:
         raise ApiError(409, "A teacher password already exists. Please log in.")
     password = check_new_password(ctx.body.get("password"))
@@ -417,10 +421,17 @@ def teacher_setup(ctx):
 @route("POST", "/api/teacher/login")
 def teacher_login(ctx):
     check_not_locked("teacher")
+    given = str(ctx.body.get("password") or "")
     stored = get_setting(ctx.conn, "teacher_password")
-    if stored is None:
+
+    if TEACHER_PASSWORD:
+        correct = hmac.compare_digest(given, TEACHER_PASSWORD)
+    elif stored is None:
         raise ApiError(409, "No teacher password yet. Please create one.")
-    if not check_secret(str(ctx.body.get("password") or ""), stored):
+    else:
+        correct = check_secret(given, stored)
+
+    if not correct:
         record_failure("teacher")
         raise ApiError(400, "Wrong password.")
     clear_failures("teacher")
@@ -429,6 +440,8 @@ def teacher_login(ctx):
 
 @route("POST", "/api/teacher/password", auth="teacher")
 def teacher_change_password(ctx):
+    if TEACHER_PASSWORD:
+        raise ApiError(400, "This password is set on the server. Change it there (the TEACHER_PASSWORD setting).")
     stored = get_setting(ctx.conn, "teacher_password")
     if not check_secret(str(ctx.body.get("current") or ""), stored):
         raise ApiError(400, "Your current password is not right.")
@@ -496,12 +509,12 @@ def teacher_export(ctx):
     stamp = datetime.now().strftime("%Y-%m-%d")
 
     if kind == "attempts":
-        max_questions = ctx.conn.execute("SELECT COALESCE(MAX(total), 0) FROM attempts").fetchone()[0]
+        max_questions = ctx.conn.execute("SELECT COALESCE(MAX(total), 0) AS n FROM attempts").fetchone()["n"]
         writer.writerow(["Student", "Lesson", "Date", "Correct", "Questions", "Score %", "Passed"]
                         + [f"Q{i + 1}" for i in range(max_questions)])
         rows = ctx.conn.execute(
             "SELECT s.name, a.* FROM attempts a JOIN students s ON s.id = a.student_id "
-            "ORDER BY s.name COLLATE NOCASE, a.lesson_id, a.created_at"
+            "ORDER BY LOWER(s.name), a.lesson_id, a.created_at"
         )
         for row in rows:
             answers = json.loads(row["answers"])
@@ -662,7 +675,7 @@ def lan_address():
 
 
 def main():
-    init_db()
+    db.init(SCHEMA)
 
     if "--reset-teacher-password" in sys.argv:
         conn = connect()
@@ -681,6 +694,11 @@ def main():
     if lan:
         print(f"  Students (same Wi-Fi):     http://{lan}:{PORT}")
     print(f"  Teacher dashboard:         http://localhost:{PORT}/teacher")
+    print(f"\n  Saving data in: {db.describe()}")
+    if CLASS_CODE:
+        print("  Students need the class code to make an account.")
+    if TEACHER_PASSWORD:
+        print("  Teacher password comes from the TEACHER_PASSWORD setting.")
     print("\n  Keep this window open. Press Ctrl+C to stop.\n")
 
     try:

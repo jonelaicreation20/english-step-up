@@ -1,0 +1,3 @@
+# Only needed when the site runs online with a Postgres database (DATABASE_URL).
+# On your own computer nothing needs to be installed.
+psycopg2-binary==2.9.10

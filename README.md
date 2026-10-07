@@ -28,6 +28,22 @@ The first time you open the teacher dashboard, you create the teacher password.
 
 Forgot the teacher password? Run `python server.py --reset-teacher-password`.
 
+## Put it online
+
+The site runs anywhere that can run Python (for example Render).
+
+- **Build command:** `pip install -r requirements.txt`
+- **Start command:** `python server.py`
+
+Settings (environment variables):
+
+| Setting | Needed? | What it does |
+| --- | --- | --- |
+| `DATABASE_URL` | Yes, online | Postgres database (for example Neon). Without it, data is saved in a file that a host may erase on restart. |
+| `TEACHER_PASSWORD` | Recommended | Fixes the teacher password so nobody else can claim the dashboard. |
+| `CLASS_CODE` | Recommended | A word students must type to make an account, so strangers cannot. |
+| `PORT` | No | Set automatically by the host. |
+
 ## Files
 
 | Path | What it is |
@@ -36,4 +52,5 @@ Forgot the teacher password? Run `python server.py --reset-teacher-password`.
 | `public/index.html` | Student website |
 | `public/teacher.html` | Teacher dashboard |
 | `server.py` | Server: accounts, saved scores, Excel export |
-| `data/` | Student database — created when the server runs, **not** uploaded to GitHub. Back it up. |
+| `db.py` | Where data is stored: a file on your computer, Postgres online |
+| `data/` | Student database on your computer — **not** uploaded to GitHub. Back it up. |

@@ -1697,6 +1697,7 @@ async function logout() {
 }
 
 let loginMode = "new";
+let needsClassCode = false;
 
 function showLogin(message) {
   document.body.classList.add("logged-out");
@@ -1739,6 +1740,13 @@ function showLogin(message) {
           ${isNew ? "<small>🔒 Remember your PIN! Write it in your notebook.</small>" : "<small>Forgot your PIN? Ask your teacher to reset it.</small>"}
         </div>
 
+        ${isNew && needsClassCode ? `
+          <div class="field">
+            <label for="loginCode">Class code</label>
+            <input id="loginCode" name="classCode" maxlength="40" placeholder="Ask your teacher" required />
+            <small>Your teacher will tell you this code.</small>
+          </div>` : ""}
+
         <button class="btn btn-primary btn-block" type="submit" id="loginSubmit">
           ${isNew ? "Create my account 🚀" : "Let's go! 🚀"}
         </button>
@@ -1767,13 +1775,17 @@ async function submitLogin(event) {
     errorBox.classList.remove("hidden");
   };
 
+  const codeBox = document.getElementById("loginCode");
+  const classCode = codeBox ? codeBox.value.trim() : "";
+
   if (name.length < 2) return fail("Please type your name.");
   if (!/^\d{4}$/.test(pin)) return fail("Your PIN must be exactly 4 numbers.");
+  if (codeBox && !classCode) return fail("Please type the class code your teacher gave you.");
 
   submit.disabled = true;
 
   try {
-    const data = await api(loginMode === "new" ? "/api/signup" : "/api/login", { name, pin });
+    const data = await api(loginMode === "new" ? "/api/signup" : "/api/login", { name, pin, classCode });
     signedIn(data);
     showToast(loginMode === "new" ? `Welcome, ${firstName()}! Your account is ready 🎉` : `Hi again, ${firstName()}! 👋`);
     go("");
@@ -2875,6 +2887,12 @@ document.addEventListener("keydown", event => {
 =========================== */
 
 async function start() {
+  try {
+    needsClassCode = (await api("/api/config")).requiresClassCode;
+  } catch (e) {
+    /* the login screen still works; a wrong code is caught by the server */
+  }
+
   if (!token) return showLogin();
 
   content.innerHTML = `<div class="loading">Loading your lessons… ⏳</div>`;
